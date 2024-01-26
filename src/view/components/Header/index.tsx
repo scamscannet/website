@@ -42,7 +42,9 @@ export const Header: FC<PropTypes> = ({ setModalActive, isModalActive }) => {
     };
 
     const handleMobileMenu = () => {
-        setIsOpen(!isOpen);
+        if (width < breakpoints.lg) {
+            setIsOpen(!isOpen);
+        }
         overflowHandler(true);
     };
 
