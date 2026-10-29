@@ -88,6 +88,15 @@
     font-family: var(--font-regular);
 }
 
+.rawJson {
+    color: var(--text-grey);
+    font-family: var(--font-regular);
+    font-size: 14px;
+    line-height: 20px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
 .rawLink {
     color: var(--purple);
     text-decoration: none;

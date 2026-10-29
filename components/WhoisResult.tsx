@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { InfoTable } from './InfoTable';
 import { AngleBracketsIcon, LocationIcon, TableIcon } from './icons';
-import type { Whois } from '@/lib/types';
+import { getWhoisDomainRaw } from '@/lib/api';
+import type { DomainWhois, IpWhois, WhoisContact, WhoisLookup } from '@/lib/types';
 import styles from './WhoisResult.module.css';
 
-const LINK_PATTERN = /(\(?https?:\/\/[^\s)]+\)?|[\w.-]+@[\w.-]+\.[a-zA-Z]{2,4})/;
+const LINK_PATTERN = /(\(?https?:\/\/[^\s)"]+\)?|[\w.-]+@[\w.-]+\.[a-zA-Z]{2,4})/;
 
 const linkify = (text: string) => text.split(LINK_PATTERN).map((part, index) => {
     if (index % 2 === 0) return part;
@@ -32,7 +33,7 @@ const splitLine = (line: string) => {
     return [line, ''];
 };
 
-const RawText = ({ text = '' }: { text?: string }) => (
+const RawText = ({ text }: { text: string }) => (
     <div>
         {text.split('\n').map((line, index) => {
             if (!line) return <div className={styles.blankRow} key={index} />;
@@ -48,6 +49,19 @@ const RawText = ({ text = '' }: { text?: string }) => (
         })}
     </div>
 );
+
+const DomainRawText = ({ domain }: { domain: string }) => {
+    const [text, setText] = useState('Loading...');
+
+    useEffect(() => {
+        getWhoisDomainRaw(domain).then(setText).catch(() => setText('No raw data available.'));
+    }, [domain]);
+
+    if (text.startsWith('{')) {
+        return <pre className={styles.rawJson}>{linkify(text)}</pre>;
+    }
+    return <RawText text={text} />;
+};
 
 const ResultHeader = ({ title, location, isRaw, setIsRaw }: { title: string, location?: string, isRaw: boolean, setIsRaw: (raw: boolean) => void }) => (
     <div className={styles.header}>
@@ -73,94 +87,102 @@ const ResultHeader = ({ title, location, isRaw, setIsRaw }: { title: string, loc
 
 const orDash = (value: unknown) => value || '-';
 
-const contactRows = (contact: Whois) => [
-    ['Type', 'type'], ['Name', 'name'], ['Organization', 'organization'], ['Email', 'email'], ['Phone', 'phone'], ['Street', 'street'],
-    ['City', 'city'], ['State', 'state'], ['Postal Code', 'postal_code'], ['Country', 'country'], ['Fax', 'fax'], ['Location', 'location'],
-].map(([key, field]) => ({ key, value: orDash(contact?.[field]) }));
+const toDay = (date: string | null) => date?.slice(0, 10) || '-';
 
-const nameServerRows = (servers: unknown) => {
-    if (!servers) return [{ key: '-', value: '-' }];
-    if (Array.isArray(servers) && typeof servers[0] === 'string') return servers.map((server) => ({ key: server, value: server }));
+const contactRows = (contact: WhoisContact) => [
+    { key: 'Name', value: orDash(contact?.name) },
+    { key: 'Organization', value: orDash(contact?.organization) },
+    { key: 'Email', value: orDash(contact?.email) },
+    { key: 'Phone', value: orDash(contact?.phone) },
+    { key: 'Street', value: orDash(contact?.address.street) },
+    { key: 'City', value: orDash(contact?.address.city) },
+    { key: 'State', value: orDash(contact?.address.state) },
+    { key: 'Postal Code', value: orDash(contact?.address.postalCode) },
+    { key: 'Country', value: orDash(contact?.address.country) },
+];
 
-    return Array.from({ length: 3 }, () => ({ key: '-', value: '-' }));
-};
-
-const DomainTables = ({ whois }: { whois: Whois }) => {
-    const { parsed, json_format: fields } = whois;
+const DomainTables = ({ whois }: { whois: DomainWhois }) => {
+    const { registrar, dates, contacts } = whois;
+    const nameservers = whois.nameservers.length ? whois.nameservers : [{ name: '-', ipv4: [], ipv6: [] }];
 
     return (
         <>
             <InfoTable collapsible title="Registrar info" rows={[
-                { key: 'Name', value: orDash(parsed?.registrar?.name) },
-                { key: 'IANA id', value: orDash(parsed?.registrar?.iana_id) },
-                { key: 'Registrar URL', value: orDash(fields?.['Registrar URL']) },
-                { key: 'Abuse Mail', value: orDash(parsed?.registrar?.abuse_mail) },
-                { key: 'Abuse Phone', value: orDash(parsed?.registrar?.abuse_phone) },
-                { key: 'Status', value: orDash(fields?.['Domain Status']) },
+                { key: 'Name', value: orDash(registrar.name) },
+                { key: 'IANA id', value: orDash(registrar.ianaId) },
+                { key: 'Registrar URL', value: orDash(registrar.url) },
+                { key: 'Abuse Mail', value: orDash(registrar.abuseEmail) },
+                { key: 'Abuse Phone', value: orDash(registrar.abusePhone?.replace(/^tel:/, '')) },
+                { key: 'Status', value: orDash(whois.status.join(', ')) },
             ]} />
             <InfoTable collapsible title="Important dates" rows={[
-                { key: 'Expires on', value: orDash(parsed?.date?.expiration_date) },
-                { key: 'Registred on', value: orDash(parsed?.date?.registration_date) },
-                { key: 'Updated on', value: orDash(parsed?.date?.updated_date) },
+                { key: 'Expires on', value: toDay(dates.expires) },
+                { key: 'Registered on', value: toDay(dates.created) },
+                { key: 'Updated on', value: toDay(dates.updated) },
             ]} />
-            <InfoTable collapsible title="Name servers" rows={nameServerRows(fields?.['Name Server'])} />
-            <InfoTable collapsible title="Contact Registrant" rows={contactRows(parsed?.contact?.registrant)} />
-            <InfoTable collapsible defaultOpen={false} title="Contact Admin" rows={contactRows(parsed?.contact?.admin)} />
-            <InfoTable collapsible defaultOpen={false} title="Contact Billing" rows={contactRows(parsed?.contact?.billing)} />
-            <InfoTable collapsible defaultOpen={false} title="Contact Tech" rows={contactRows(parsed?.contact?.tech)} />
+            <InfoTable
+                collapsible
+                title="Name servers"
+                rows={nameservers.map((server) => ({ key: server.name, value: orDash([...server.ipv4, ...server.ipv6].join(', ')) }))}
+            />
+            <InfoTable collapsible title="Contact Registrant" rows={contactRows(contacts.registrant)} />
+            <InfoTable collapsible defaultOpen={false} title="Contact Admin" rows={contactRows(contacts.admin)} />
+            <InfoTable collapsible defaultOpen={false} title="Contact Billing" rows={contactRows(contacts.billing)} />
+            <InfoTable collapsible defaultOpen={false} title="Contact Tech" rows={contactRows(contacts.tech)} />
         </>
     );
 };
 
-const IpTables = ({ whois }: { whois: Whois }) => {
-    const { parsed, json_format: fields } = whois;
-    const address = parsed?.addresses?.[0];
+const IpTables = ({ whois }: { whois: IpWhois }) => {
+    const { location, network } = whois;
 
     return (
         <>
             <InfoTable
                 collapsible
                 title="Geolocation"
-                location={address?.latitude ? [Number(address.latitude), Number(address.longitude)] : undefined}
+                location={[location.latitude, location.longitude]}
                 rows={[
-                    { key: 'Country', value: orDash(address?.country) },
-                    { key: 'Address', value: orDash(address?.address) },
-                    { key: 'Longitude', value: orDash(address?.longitude) },
-                    { key: 'Latitude', value: orDash(address?.latitude) },
+                    { key: 'Country', value: location.country },
+                    { key: 'Address', value: location.address },
+                    { key: 'Longitude', value: location.longitude },
+                    { key: 'Latitude', value: location.latitude },
                 ]}
             />
             <InfoTable collapsible title="Summary" rows={[
-                { key: 'Whois Server', value: orDash(parsed?.whois) },
-                { key: 'ASN', value: orDash(fields?.OriginAS || fields?.origin) },
-                { key: 'Company', value: orDash(fields?.OrgName || fields?.descr) },
-                { key: 'Route', value: orDash(fields?.CIDR || fields?.route) },
-                { key: 'Abuse Contact', value: orDash(fields?.OrgAbuseEmail || fields?.['abuse-mailbox']) },
+                { key: 'Whois Server', value: whois.whoisServer },
+                { key: 'ASN', value: whois.asn },
+                { key: 'Company', value: whois.organization },
+                { key: 'Route', value: network.cidr },
+                { key: 'Abuse Contact', value: whois.abuseEmail },
             ]} />
             <InfoTable collapsible title="IP Net" rows={[
-                { key: 'Net Name', value: orDash(fields?.NetName || fields?.netname) },
-                { key: 'First IP', value: orDash(parsed?.ipnet?.first_ip) },
-                { key: 'Last Ip', value: orDash(parsed?.ipnet?.last_ip) },
-                { key: 'All IPs', value: orDash(parsed?.ipnet?.all_ips) },
+                { key: 'Net Name', value: network.name },
+                { key: 'First IP', value: network.firstIp },
+                { key: 'Last IP', value: network.lastIp },
             ]} />
         </>
     );
 };
 
-export const WhoisResult = ({ whois }: { whois: Whois }) => {
+export const WhoisResult = ({ lookup }: { lookup: WhoisLookup }) => {
     const [isRaw, setIsRaw] = useState(false);
-    const isIp = Boolean(whois?.parsed?.ip);
-    const address = whois?.parsed?.addresses?.[0];
+
+    if (lookup.type === 'ip') {
+        const { data } = lookup;
+
+        return (
+            <div className={styles.container}>
+                <ResultHeader title={data.ip} location={`${data.location.country}, ${data.location.city}`} isRaw={isRaw} setIsRaw={setIsRaw} />
+                {isRaw ? <RawText text={data.raw} /> : <IpTables whois={data} />}
+            </div>
+        );
+    }
 
     return (
         <div className={styles.container}>
-            <ResultHeader
-                title={isIp ? whois.parsed.ip : whois?.parsed?.domain}
-                location={isIp ? `${address?.country}, ${address?.address?.split(',')[1]}` : undefined}
-                isRaw={isRaw}
-                setIsRaw={setIsRaw}
-            />
-            {isRaw && <RawText text={whois?.raw} />}
-            {!isRaw && (isIp ? <IpTables whois={whois} /> : <DomainTables whois={whois} />)}
+            <ResultHeader title={lookup.data.domain} isRaw={isRaw} setIsRaw={setIsRaw} />
+            {isRaw ? <DomainRawText domain={lookup.data.domain} /> : <DomainTables whois={lookup.data} />}
         </div>
     );
 };

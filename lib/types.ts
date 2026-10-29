@@ -20,8 +20,37 @@ export type TldList = {
     pagination: { current_page: number, last_page: number, per_page: number }
 };
 
-// The whois API returns loosely structured data that differs between registries.
-export type Whois = any;
+export type WhoisContact = {
+    name: string | null
+    organization: string | null
+    email: string | null
+    phone: string | null
+    address: { street: string | null, city: string | null, state: string | null, postalCode: string | null, country: string | null }
+    redacted: boolean
+} | null;
+
+/** Response of who-dat `GET /v1/whois/{domain}` */
+export type DomainWhois = {
+    domain: string
+    registrar: { name: string | null, ianaId: string | null, url: string | null, abuseEmail: string | null, abusePhone: string | null }
+    status: string[]
+    nameservers: { name: string, ipv4: string[], ipv6: string[] }[]
+    dates: { created: string | null, updated: string | null, expires: string | null }
+    contacts: { registrant: WhoisContact, admin: WhoisContact, tech: WhoisContact, billing: WhoisContact }
+};
+
+export type IpWhois = {
+    ip: string
+    whoisServer: string
+    asn: string
+    organization: string
+    abuseEmail: string
+    network: { name: string, cidr: string, firstIp: string, lastIp: string }
+    location: { country: string, city: string, address: string, latitude: number, longitude: number }
+    raw: string
+};
+
+export type WhoisLookup = { type: 'domain', data: DomainWhois } | { type: 'ip', data: IpWhois };
 
 export type BlogCardData = { date: string, title: string, description: string, link: string };
 

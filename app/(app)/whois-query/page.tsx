@@ -8,20 +8,21 @@ import { WhoisResult } from '@/components/WhoisResult';
 import { getWhoisDomain, getWhoisIp } from '@/lib/api';
 import { useGoToTool, useHash, useReportToolStatus } from '@/lib/hooks';
 import { domainRegex, ipv4Regex } from '@/lib/validation';
-import type { Whois } from '@/lib/types';
+import type { WhoisLookup } from '@/lib/types';
 import tools from '../tools.module.css';
 
-const lookupFor = (value: string) => {
-    if (domainRegex.test(value)) return getWhoisDomain;
-    if (ipv4Regex.test(value)) return getWhoisIp;
-    return null;
+const lookup = async (value: string): Promise<WhoisLookup> => {
+    if (ipv4Regex.test(value)) {
+        return { type: 'ip', data: await getWhoisIp(value) };
+    }
+    return { type: 'domain', data: await getWhoisDomain(value) };
 };
 
 export default function WhoisQueryPage() {
     const hash = useHash();
     const router = useRouter();
     const goToTool = useGoToTool();
-    const [whois, setWhois] = useState<Whois | null>(null);
+    const [whois, setWhois] = useState<WhoisLookup | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [failed, setFailed] = useState(false);
 
@@ -34,8 +35,7 @@ export default function WhoisQueryPage() {
             return;
         }
 
-        const lookup = lookupFor(hash);
-        if (!lookup) {
+        if (!domainRegex.test(hash) && !ipv4Regex.test(hash)) {
             router.replace('/whois-query');
             return;
         }
@@ -54,7 +54,7 @@ export default function WhoisQueryPage() {
 
     return (
         <section className={tools.section}>
-            {hash && whois ? <WhoisResult whois={whois} /> : (
+            {hash && whois ? <WhoisResult lookup={whois} /> : (
                 <>
                     <div className={tools.intro}>
                         <SectionTitle className={tools.title}>Whois Query</SectionTitle>

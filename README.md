@@ -21,11 +21,13 @@ API endpoints are configured via `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_WHOIS_UR
 app/(landing)/   marketing pages: home, blog, about us (shared header + footer layout)
 app/(app)/       tool pages: scam check, whois query, domain zone (shared sidebar layout)
 components/      shared UI; icons.tsx holds all icons
-lib/             api.ts (requests), types.ts, hooks.ts, validation.ts, blog.ts (placeholder content)
+lib/             api.ts (requests), types.ts, hooks.ts, validation.ts, blog.ts and mocks.ts (placeholder data)
 docs/            corporate identity
 ```
 
 Tool pages take their input from the URL hash, e.g. `/scam-check#example.com`.
+
+Domain whois uses [who-dat](https://whois.backend.scamscan.net/docs). It has no IP support, so IP lookups return static data from `lib/mocks.ts` (see `getWhoisIp` in `lib/api.ts`).
 
 ## Deploy
 

@@ -1,7 +1,8 @@
-import type { ListStatus, ReportPayload, ScamCheckResult, TldList, Whois } from './types';
+import { ipWhoisMock } from './mocks';
+import type { DomainWhois, IpWhois, ListStatus, ReportPayload, ScamCheckResult, TldList } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.scamscan.net';
-const WHOIS_URL = process.env.NEXT_PUBLIC_WHOIS_URL || 'https://whois.scamscan.net';
+const WHOIS_URL = process.env.NEXT_PUBLIC_WHOIS_URL || 'https://whois.backend.scamscan.net';
 
 async function request(url: string, init?: RequestInit, expectedStatus = 200) {
     const response = await fetch(url, init);
@@ -46,9 +47,22 @@ export const getDomainScore = (url: string): Promise<number> => json(`${API_URL}
 
 export const getWebsiteScore = (url: string): Promise<number> => json(`${API_URL}/ai/classify/website?url=${url}`, { method: 'POST' }, 201).then(toPercent);
 
-export const getWhoisDomain = (domain: string): Promise<Whois> => json(`${WHOIS_URL}/whois/${domain}?live=false`);
+export const getWhoisDomain = (domain: string): Promise<DomainWhois> => json(`${WHOIS_URL}/v1/whois/${domain}`);
 
-export const getWhoisIp = (ip: string): Promise<Whois> => json(`${WHOIS_URL}/ip-whois/${ip}?max_ipnet_size=64&live=false`);
+/** The original upstream payload: RDAP JSON (pretty-printed) or plain WHOIS text. */
+export async function getWhoisDomainRaw(domain: string) {
+    const text = await request(`${WHOIS_URL}/v1/whois/${domain}?raw=true`).then((response) => response.text());
+    try {
+        return JSON.stringify(JSON.parse(text), null, 2);
+    } catch {
+        return text;
+    }
+}
+
+// Simulated endpoint: the whois API only supports domains, so IP lookups return static data.
+export const getWhoisIp = (ip: string): Promise<IpWhois> => new Promise((resolve) => {
+    setTimeout(() => resolve({ ...ipWhoisMock, ip }), 300);
+});
 
 export const getTlds = (page: number, perPage: number, query: string): Promise<TldList> => json(`${API_URL}/kdb/tlds/list?page=${page}&per_page=${perPage}&q=${query}`);
 
