@@ -1,0 +1,237 @@
+/* Status chip */
+
+.chip {
+    display: flex;
+    padding: 4px 12px 4px 8px;
+    width: fit-content;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 4px;
+}
+.chipSafe { background: #ECFDF3; color: #067647; }
+.chipScam { background: #FEF3F2; color: #B42318; }
+.chipUnclassified { background: #F5F5F5; color: #344054; }
+
+.chipText {
+    font-family: var(--font-bold);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 28px;
+}
+
+/* Score chart */
+
+@keyframes shimmer {
+    0% { transform: translateX(-50%); }
+    50% { transform: translateX(50%); }
+    100% { transform: translateX(100%); }
+}
+
+.chartWrapper {
+    width: 136px;
+    height: 132px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart {
+    width: 126px;
+    height: 126px;
+    border-radius: 50%;
+}
+
+.chartLabel {
+    color: var(--text-grey);
+    font-family: var(--font-regular);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+}
+
+.noData,
+.skeleton {
+    background-color: #fcf9f9;
+    border-radius: 50%;
+    text-align: center;
+    height: 126px;
+    width: 126px;
+}
+
+.noData {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.skeleton {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+}
+.skeleton::after {
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(90deg, rgba(246, 246, 248, 0.5), #D9D9D9, #D9D9D9, rgba(246, 246, 248, 0.5));
+    animation: shimmer 1.5s infinite;
+    content: '';
+}
+
+/* Screenshots */
+
+.screenshots {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(101, 101, 101, 0.03);
+    border: 1px solid #F5F5F5;
+}
+
+.screenshotsHead {
+    padding: 12px 24px;
+    font-family: var(--font-semibold);
+    color: var(--text-grey);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 17px;
+    background: #F9FAFB;
+}
+
+.screenshotsDescription {
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-regular);
+    color: var(--text-grey);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+}
+
+.textLink {
+    display: flex;
+    gap: 4px;
+    font-family: var(--font-regular);
+    color: var(--purple);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    cursor: pointer;
+    text-wrap: nowrap;
+}
+
+.screenshot {
+    padding: 24px;
+    position: relative;
+    cursor: pointer;
+}
+.screenshot img {
+    width: 100%;
+}
+
+.screenshotOverlay {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.15);
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    display: flex;
+    transition: all .3s ease;
+}
+.screenshotOverlay:hover {
+    opacity: 1;
+}
+
+.fullSizeButton {
+    background-color: #fff;
+    border: 0;
+    margin: auto;
+}
+
+.noImage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+}
+
+.noImageText {
+    color: var(--text-grey);
+    margin-bottom: 12px;
+}
+
+.textModal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: 38px;
+    display: flex;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+}
+
+.closeText {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 40px;
+    font-weight: bold;
+    color: var(--grey-info);
+    z-index: 9999;
+}
+.closeText:hover {
+    color: #fff;
+}
+
+.textWrapper {
+    background-color: #fff;
+    width: 100%;
+    max-width: 1070px;
+    border-radius: 4px;
+    padding: 32px;
+    overflow-wrap: anywhere;
+    overflow-y: scroll;
+    max-height: 800px;
+}
+
+.text {
+    display: flex;
+    gap: 4px;
+    font-family: sans-serif;
+    color: var(--black);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    text-wrap: wrap;
+}
+
+@media (max-width: 960px) {
+    .screenshotOverlay {
+        display: none;
+    }
+}
+
+@media (max-width: 540px) {
+    .screenshotsDescription {
+        flex-direction: column;
+        gap: 24px;
+    }
+    .textWrapper {
+        padding: 10px;
+    }
+}

@@ -1,0 +1,213 @@
+/* Meyer reset v5.0.1 (previously injected by styled-reset) */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, menu, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+main, menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, main, menu, nav, section {
+    display: block;
+}
+*[hidden] {
+    display: none;
+}
+body {
+    line-height: 1;
+}
+menu, ol, ul {
+    list-style: none;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+:root {
+    --purple: #6023FA;
+    --violet: #D939DE;
+    --purple-dark: #1F0D4C;
+    --purple-dark-2: #27115E;
+    --purple-pressed: #421BA3;
+    --black: #070411;
+    --text-black: #090A0B;
+    --text-grey: #344054;
+    --text-grey-light: #B8B8B8;
+    --grey-light: #D9D9D9;
+    --grey-info: #818181;
+    --grey-background: #F6F6F8;
+    --error: #F04438;
+    --dark-gradient: linear-gradient(89deg, #1F0D4C 0.16%, #070410 15.46%, #070411 77.6%, #27115E 99.28%);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+}
+
+body {
+    font-family: var(--font-regular), sans-serif;
+}
+
+.app-root {
+    margin: 0 auto;
+    height: 100vh;
+    width: 100%;
+}
+
+.blog-page {
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+@media (min-width: 960px) {
+    .blog-page {
+        margin-top: 156px;
+    }
+}
+
+.leaflet-control-attribution.leaflet-control {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+.leaflet-control-attribution.leaflet-control:first-child span,
+.leaflet-control-attribution.leaflet-control:first-child a:first-child {
+    display: none;
+}
+
+/* Shared elements. Kept global so page-level CSS modules, loaded later, can override them. */
+
+.section-title {
+    font-family: var(--font-bold);
+    color: var(--text-black);
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 56px;
+}
+@media (min-width: 0px) {
+    .section-title {
+        font-size: 28px;
+        line-height: 38px;
+        text-align: center;
+    }
+}
+@media (min-width: 720px) {
+    .section-title {
+        font-size: 38px;
+        line-height: 48px;
+        text-align: center;
+    }
+}
+@media (min-width: 960px) {
+    .section-title {
+        font-size: 48px;
+        line-height: 56px;
+    }
+}
+
+.section-subtitle {
+    color: var(--text-grey);
+    font-family: var(--font-regular);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28px;
+}
+@media (min-width: 0px) {
+    .section-subtitle {
+        font-size: 16px;
+        line-height: 24px;
+        max-width: 400px;
+    }
+}
+@media (min-width: 720px) {
+    .section-subtitle {
+        font-size: 18px;
+    }
+}
+@media (min-width: 960px) {
+    .section-subtitle {
+        font-size: 20px;
+        line-height: 28px;
+        max-width: fit-content;
+    }
+}
+
+.link {
+    font-family: var(--font-regular);
+    color: #fff;
+    padding: 8px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button {
+    width: fit-content;
+    max-height: 48px;
+    height: 100%;
+    display: flex;
+    padding: 12px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+    border-radius: 0 2px 2px 0;
+    background: var(--purple);
+    border: 0;
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.04);
+    font-family: var(--font-regular);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    transition: all .3s ease;
+    cursor: pointer;
+    user-select: none;
+}
+.button:active {
+    background-color: var(--purple-pressed);
+}
+.button-outlined {
+    background: transparent;
+    border: 1px solid var(--purple);
+    color: var(--purple);
+}
+.button-outlined:active {
+    background-color: transparent;
+    color: var(--purple-pressed);
+    border-color: var(--purple-pressed);
+}
+.button-white-outlined {
+    background: transparent;
+    border: 1px solid #fff;
+}
+.button-white-outlined:active {
+    border-color: var(--purple-pressed);
+}

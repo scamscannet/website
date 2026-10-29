@@ -1,0 +1,119 @@
+@keyframes appear {
+    0% { opacity: 0; }
+    10% { opacity: 0.3; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    border: 1px solid #F5F5F5;
+    box-shadow: 0 2px 12px 0 rgba(101, 101, 101, 0.03);
+    width: 100%;
+    transition: all .3s ease;
+}
+
+.head {
+    padding: 12px 24px;
+    font-family: var(--font-semibold);
+    color: var(--text-grey);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 17px;
+    background: #F9FAFB;
+    border-bottom: 1px solid #F5F5F5;
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.chevron {
+    transition: all .3s ease;
+}
+
+.body {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.table {
+    max-width: 100%;
+    width: 100%;
+}
+.withMap {
+    max-width: 698px;
+    width: calc(100% - 342px);
+}
+
+.rows {
+    animation: appear .3s;
+}
+
+.row {
+    display: flex;
+    border-bottom: 1px solid #F5F5F5;
+    height: fit-content;
+}
+
+.cell {
+    width: 100%;
+    min-height: 64px;
+    height: fit-content;
+    padding: 12px 24px;
+    font-family: var(--font-regular);
+    color: var(--text-grey);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+    display: flex;
+    align-items: center;
+    overflow-wrap: anywhere;
+}
+.half {
+    max-width: 50%;
+}
+.keyCompact {
+    max-width: 150px;
+}
+
+.foot {
+    display: flex;
+    padding: 12px 24px;
+    cursor: pointer;
+}
+
+.detailsLink {
+    display: flex;
+    gap: 4px;
+    text-decoration: none;
+    font-family: var(--font-regular);
+    color: var(--purple);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    cursor: pointer;
+}
+
+.map {
+    padding: 8px;
+    display: flex;
+    width: 342px;
+    height: 256px;
+}
+
+@media (max-width: 960px) {
+    .body {
+        flex-direction: column;
+    }
+    .table {
+        width: 100%;
+    }
+    .value {
+        max-width: unset;
+    }
+}

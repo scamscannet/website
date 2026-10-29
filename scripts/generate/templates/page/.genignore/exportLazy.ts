@@ -1,1 +1,0 @@
-export const __pageName__(pascalCase) = lazy(() => import(/* webpackChunkName: "__pageName__(pascalCase)" */ './__pageName__(pascalCase)'));

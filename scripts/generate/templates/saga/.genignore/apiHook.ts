@@ -1,1 +1,0 @@
-const { fetch__entityName__(pascalCase) } = use__entityName__(pascalCase)Saga();  /* Saga api hook */
