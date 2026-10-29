@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, useSyncExternalStore } from 'react';
+import { createContext, useContext, useEffect, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import type { ToolStatus } from './types';
 
@@ -46,20 +46,6 @@ export const useGoToTool = () => {
             router.push(`${path}#${value}`);
         }
     };
-};
-
-export const useScrolled = () => {
-    const [scrolled, setScrolled] = useState(false);
-
-    useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY !== 0);
-        onScroll();
-        window.addEventListener('scroll', onScroll);
-
-        return () => window.removeEventListener('scroll', onScroll);
-    }, []);
-
-    return scrolled;
 };
 
 export const useBodyScrollLock = (locked: boolean) => {

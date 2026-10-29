@@ -224,6 +224,7 @@
     padding-top: 8px;
     gap: 32px;
     position: sticky;
+    top: 96px;
 }
 
 .hashtags {

@@ -1,10 +1,3 @@
-@keyframes appear {
-    0% { opacity: 0; }
-    30% { opacity: 0.5; }
-    40% { opacity: 0.7; }
-    100% { opacity: 1; }
-}
-
 @keyframes slideIn {
     0% { left: -100%; }
     50% { left: -50%; }
@@ -15,13 +8,10 @@
     position: fixed;
     width: 100%;
     top: 0;
-    padding: 24px 80px;
-    transition: all 1s ease;
+    padding: 12px 80px;
     z-index: 9999;
-    background: transparent;
-}
-.headerScrolled {
     background: #fff;
+    border-bottom: 1px solid #F5F5F5;
 }
 
 .headerContent {
@@ -29,9 +19,17 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    gap: 24px;
     padding: 0;
     margin: 0;
     list-style: none;
+}
+
+.logoLink {
+    padding: 0;
+}
+.logoLink img {
+    display: block;
 }
 
 .column {
@@ -50,16 +48,11 @@
     list-style: none;
 }
 
-.hiddenOnDesktop {
-    display: none;
-}
-
 .navLink {
     color: var(--text-black);
     margin-right: 8px;
     white-space: nowrap;
     font-family: var(--font-medium);
-    animation: appear 1.5s;
     transition: all .3s ease;
 }
 .navLink:hover,
@@ -80,7 +73,6 @@
     cursor: pointer;
     text-decoration: none;
     margin-right: 8px;
-    animation: appear 1.5s;
     transition: all .3s ease;
 }
 .anchorLink:hover {
@@ -96,9 +88,18 @@
 .openAppLink {
     padding: 0;
 }
+.openAppLink button {
+    white-space: nowrap;
+}
 
 .menuIcon {
     display: none;
+}
+
+@media (max-width: 1200px) {
+    .header {
+        padding: 12px 24px;
+    }
 }
 
 .overlay {
@@ -117,7 +118,6 @@
     .header {
         padding: 0 12px;
         height: 48px;
-        transition: all .3s ease;
     }
 
     .headerContent {
@@ -141,10 +141,6 @@
         display: flex;
     }
 
-    .column,
-    .hiddenOnDesktop {
-        display: flex;
-    }
 
     .links {
         display: flex;

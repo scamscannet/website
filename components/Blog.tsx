@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { BlogCard } from './BlogCard';
 import { Button, SectionSubtitle, SectionTitle } from './ui';
 import { blogCards, featuredArticles, slugify } from '@/lib/blog';
-import { useHash, useScrolled } from '@/lib/hooks';
+import { scrollToSection, useHash } from '@/lib/hooks';
 import type { Article } from '@/lib/types';
 import styles from './Blog.module.css';
 
@@ -44,28 +44,20 @@ export const FeaturedArticles = () => {
     );
 };
 
-const scrollToHeading = (slug: string) => {
-    const heading = document.getElementById(slug);
-    if (heading) {
-        window.scrollTo({ behavior: 'smooth', top: heading.getBoundingClientRect().top + window.scrollY });
-    }
-};
-
 export const ArticleView = ({ article }: { article: Article }) => {
     const hash = useHash();
-    const scrolled = useScrolled();
     const anchors = [...article.sections.map((section) => section.title), 'Conclusion'];
 
     useEffect(() => {
         if (hash && window.innerWidth >= 960) {
-            scrollToHeading(hash);
+            scrollToSection(hash);
         }
     }, []);
 
     const onAnchorClick = (event: MouseEvent, slug: string) => {
         event.preventDefault();
         window.history.pushState(null, '', `#${slug}`);
-        scrollToHeading(slug);
+        scrollToSection(slug);
     };
 
     return (
@@ -103,7 +95,7 @@ export const ArticleView = ({ article }: { article: Article }) => {
                     </div>
                     <SectionSubtitle className={styles.articleText}>{article.conclusion}</SectionSubtitle>
                 </div>
-                <aside className={styles.tableOfContents} style={{ top: scrolled ? 120 : 0 }}>
+                <aside className={styles.tableOfContents}>
                     <div>
                         <SectionSubtitle className={styles.articleText}>{article.date}</SectionSubtitle>
                         <div className={styles.hashtags}>

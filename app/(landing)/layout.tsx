@@ -7,12 +7,11 @@ import { Button } from '@/components/ui';
 import { HeaderSearchBar } from '@/components/SearchBar';
 import { ReportModal } from '@/components/ReportModal';
 import { LinkedInIcon, MenuIcon, TelegramIcon, XTwitterIcon } from '@/components/icons';
-import { isMobileWidth, ReportModalContext, scrollToSection, useBodyScrollLock, useScrolled } from '@/lib/hooks';
+import { isMobileWidth, ReportModalContext, scrollToSection, useBodyScrollLock } from '@/lib/hooks';
 import styles from './layout.module.css';
 
 const Header = ({ openReportModal }: { openReportModal: () => void }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const scrolled = useScrolled();
     const pathname = usePathname();
     const router = useRouter();
     const closeMenu = () => setIsOpen(false);
@@ -47,22 +46,22 @@ const Header = ({ openReportModal }: { openReportModal: () => void }) => {
     );
 
     return (
-        <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ''}`}>
+        <header className={styles.header}>
             <div className={styles.menuIcon} onClick={() => setIsOpen(true)}>
                 <MenuIcon width={24} height={24} />
             </div>
             <ul className={`${styles.headerContent} ${isOpen ? styles.open : ''}`}>
                 <li className={styles.column}>
-                    <Link href="/" className="link" onClick={closeMenu}>
+                    <Link href="/" className={`link ${styles.logoLink}`} onClick={closeMenu}>
                         <img src="/images/logo.png" alt="ScamScan" width={72} height={48} />
                     </Link>
                 </li>
-                <li className={`${styles.column} ${styles.searchColumn} ${scrolled ? '' : styles.hiddenOnDesktop}`}>
+                <li className={`${styles.column} ${styles.searchColumn}`}>
                     <HeaderSearchBar tool="/scam-check" />
                 </li>
                 <li className={styles.column}>
                     <div className={styles.links}>
-                        <nav className={`${styles.links} ${scrolled ? '' : styles.hiddenOnDesktop}`}>
+                        <nav className={styles.links}>
                             {navLink('/about-us', 'About Us')}
                             <span className={styles.anchorLink} onClick={goToTools}>Tools</span>
                             {navLink('/blog', 'Blog')}
