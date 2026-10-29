@@ -1,1 +1,0 @@
-import { use__entityName__(pascalCase)Saga } from './saga'; /* Choose one technology, Saga or Thunk */

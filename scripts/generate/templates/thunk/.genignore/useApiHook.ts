@@ -1,1 +1,0 @@
-//     fetch__entityName__(pascalCase)();

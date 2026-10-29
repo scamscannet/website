@@ -2,6 +2,10 @@
 
 # Directories at root of a first
 /node_modules/
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
 /build/
 /coverage/
 /flow-coverage/

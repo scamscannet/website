@@ -1,1 +1,0 @@
-import { rootSaga } from './rootSaga';
