@@ -1,0 +1,73 @@
+.page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 16px;
+    background: var(--grey-background);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 420px;
+    width: 100%;
+    padding: 32px;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 8px 16px 0 rgba(112, 115, 119, 0.12);
+}
+
+.title {
+    color: var(--text-black);
+    font-family: var(--font-bold);
+    font-size: 28px;
+    line-height: 32px;
+}
+
+.inputWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.label {
+    font-family: var(--font-semibold);
+    color: var(--text-black);
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.input {
+    padding: 12px;
+    height: 48px;
+    outline: 0;
+    border: 1px solid var(--grey-light);
+    border-radius: 2px;
+    font-family: var(--font-regular);
+    font-size: 16px;
+    transition: all .3s ease;
+}
+.input:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 2px rgba(96, 35, 250, 0.20);
+}
+
+.error {
+    color: var(--error);
+    font-size: 14px;
+    line-height: 24px;
+}
+
+.button {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.note {
+    color: var(--grey-info);
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+}
