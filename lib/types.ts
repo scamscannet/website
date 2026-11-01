@@ -1,4 +1,12 @@
-export type ListStatus = 'allowlist' | 'blocklist' | 'watchlist' | 'scamscanlist' | 'trusted';
+import type { components } from './schema';
+
+type Schemas = components['schemas'];
+
+export type ListStatus = Schemas['DomainListSingleResponse']['status'];
+
+export type TldList = Schemas['KnownDomainDatabaseList'];
+
+export type ReportPayload = Schemas['DomainReportsNewReportRequest'];
 
 export type ScamStatus = 'Safe' | 'Scam' | 'Unclassified';
 
@@ -13,11 +21,6 @@ export type ScamCheckResult = {
     ip: string
     country: string
     registrant: string
-};
-
-export type TldList = {
-    tlds: { tld?: string, registrar?: string, last_update: string, count?: number }[]
-    pagination: { current_page: number, last_page: number, per_page: number }
 };
 
 export type WhoisContact = {
@@ -67,11 +70,4 @@ export type Article = {
 
 export type ToolStatus ={ hasResult: boolean, failed: boolean };
 
-export type ReportPayload = {
-    url: string
-    comment: string
-    email: string
-    source: string
-    contact_allowed: boolean
-    tags: null
-};
+export type ScrapingNode = Schemas['PublicNodes'];

@@ -17,7 +17,7 @@ const UNCLASSIFIED_TEXT = 'Description: The status of this website has not been 
 
 const STATUS: Record<ListStatus, { chip: ScamStatus, text: string }> = {
     allowlist: { chip: 'Safe', text: 'This website is deemed safe for users.It has not exhibited any suspicious or harmful behavior, and interactions with the site are unlikely to pose athreat to your online safety.' },
-    trusted: { chip: 'Unclassified', text: 'This website is deemed safe for users.It has not exhibited any suspicious or harmful behavior, and interactions with the site are unlikely to pose athreat to your online safety.' },
+    trustlist: { chip: 'Unclassified', text: 'This website is deemed safe for users.It has not exhibited any suspicious or harmful behavior, and interactions with the site are unlikely to pose athreat to your online safety.' },
     blocklist: { chip: 'Scam', text: 'Description: This website has been identified as potentially harmful or fraudulent. Exercise caution and avoid interacting with or providing any personal information on this site.' },
     watchlist: { chip: 'Unclassified', text: UNCLASSIFIED_TEXT },
     scamscanlist: { chip: 'Unclassified', text: UNCLASSIFIED_TEXT },

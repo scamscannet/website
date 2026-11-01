@@ -1,5 +1,7 @@
+import createClient from 'openapi-fetch';
 import { ipWhoisMock } from './mocks';
-import type { DomainWhois, IpWhois, ListStatus, ReportPayload, ScamCheckResult, TldList } from './types';
+import type { paths } from './schema';
+import type { DomainWhois, IpWhois, ReportPayload, ScamCheckResult } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.scamscan.net';
 const WHOIS_URL = process.env.NEXT_PUBLIC_WHOIS_URL || 'https://whois.backend.scamscan.net';
@@ -11,6 +13,17 @@ async function request(url: string, init?: RequestInit, expectedStatus = 200) {
     }
 
     return response;
+}
+
+const client = createClient<paths>({ baseUrl: API_URL });
+
+async function call<T>(promise: Promise<{ data?: T, response: Response }>) {
+    const { data, response } = await promise;
+    if (!response.ok) {
+        throw new Error(`Request to ${response.url} failed with status ${response.status}`);
+    }
+
+    return data as T;
 }
 
 const json = (url: string, init?: RequestInit, expectedStatus?: number) => request(url, init, expectedStatus).then((response) => response.json());
@@ -37,7 +50,7 @@ export async function getScamCheck(url: string): Promise<ScamCheckResult> {
     };
 }
 
-export const getListStatus = (url: string): Promise<ListStatus> => json(`${API_URL}/lists?url=${url}`).then((data) => data.status);
+export const getListStatus = (url: string) => call(client.GET('/lists', { params: { query: { url } } })).then((data) => data.status);
 
 export const getScreenshot = (url: string) => image(`${API_URL}/registry/image?url=${url}`);
 
@@ -64,12 +77,18 @@ export const getWhoisIp = (ip: string): Promise<IpWhois> => new Promise((resolve
     setTimeout(() => resolve({ ...ipWhoisMock, ip }), 300);
 });
 
-export const getTlds = (page: number, perPage: number, query: string): Promise<TldList> => json(`${API_URL}/kdb/tlds/list?page=${page}&per_page=${perPage}&q=${query}`);
+export const getTlds = (page: number, perPage: number, q: string) => call(client.GET('/kdb/tlds/list', { params: { query: { page, per_page: perPage, q } } }));
 
 export const tldDownloadUrl = (tld: string) => `${API_URL}/kdb/tlds/download?tld=${tld}`;
 
-export const sendReport = (payload: ReportPayload) => request(`${API_URL}/report`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-}, 201);
+export const sendReport = (payload: ReportPayload) => call(client.POST('/report', { body: payload }));
+
+export const login = (email: string, password: string) => call(client.POST('/user/login', { body: { email, password }, credentials: 'include' }));
+
+export const getMe = () => call(client.GET('/user/me', { credentials: 'include' }));
+
+export const getNodes = () => call(client.GET('/dispatcher/node/list', { credentials: 'include' }));
+
+export const createNode = () => call(client.POST('/dispatcher/node/create', { credentials: 'include' })).then((data) => data.secret);
+
+export const deleteNode = (nodeId: string) => call(client.DELETE('/dispatcher/node/delete/{node_id}', { params: { path: { node_id: nodeId } }, credentials: 'include' }));
