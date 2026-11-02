@@ -3,18 +3,17 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button } from '@/components/ui';
 import { HeaderSearchBar } from '@/components/SearchBar';
 import { ReportModal } from '@/components/ReportModal';
-import { DomainZoneIcon, LogoutIcon, MenuIcon, ScamCheckIcon, WhoisQueryIcon } from '@/components/icons';
+import { LogoutIcon, MenuIcon, ScamCheckIcon, TakedownIcon, ToolsIcon } from '@/components/icons';
 import { isMobileWidth, ReportModalContext, ToolStatusContext, useBodyScrollLock, useHash } from '@/lib/hooks';
 import type { ToolStatus } from '@/lib/types';
 import styles from './tools.module.css';
 
 const toolLinks = [
-    { label: 'Scam Check', Icon: ScamCheckIcon, href: '/scam-check' },
-    { label: 'Whois Query', Icon: WhoisQueryIcon, href: '/whois-query' },
-    { label: 'Domain Zone', Icon: DomainZoneIcon, href: '/domain-zone' },
+    { label: 'Scam Check', Icon: ScamCheckIcon, href: '/scam-check', paths: ['/scam-check'] },
+    { label: 'Takedown Tracker', Icon: TakedownIcon, href: '/takedown', paths: ['/takedown'] },
+    { label: 'Tools', Icon: ToolsIcon, href: '/tools', paths: ['/tools', '/whois-query', '/domain-zone'] },
 ];
 
 const footerLinks = [
@@ -63,19 +62,21 @@ export default function ToolsLayout({ children }: { children: React.ReactNode })
                             </div>
                             <nav className={styles.menu}>
                                 <ul className={styles.menuItems}>
-                                    {toolLinks.map(({ label, Icon, href }) => (
-                                        <li className={`${styles.menuItem} ${pathname === href ? styles.active : ''}`} key={href}>
-                                            <div className={styles.activeMarker} />
-                                            <Icon />
-                                            <Link href={href} className={`link ${styles.menuLink}`} onClick={closeMenu}>{label}</Link>
+                                    {toolLinks.map(({ label, Icon, href, paths }) => (
+                                        <li key={href}>
+                                            <Link href={href} className={`${styles.menuItem} ${paths.some((path) => pathname.startsWith(path)) ? styles.active : ''}`} onClick={closeMenu}>
+                                                <div className={styles.activeMarker} />
+                                                <Icon />
+                                                <span className={`link ${styles.menuLink}`}>{label}</span>
+                                            </Link>
                                         </li>
                                     ))}
                                 </ul>
-                                <div className={styles.menuItem}>
+                                <Link href="/" className={styles.menuItem}>
                                     <div className={styles.activeMarker} />
                                     <LogoutIcon />
-                                    <a href="#" className={`link ${styles.menuLink}`}>Log out</a>
-                                </div>
+                                    <span className={`link ${styles.menuLink}`}>Return to site</span>
+                                </Link>
                             </nav>
                         </div>
                     </aside>
@@ -92,9 +93,6 @@ export default function ToolsLayout({ children }: { children: React.ReactNode })
                                     errorText={toolStatus.failed ? headerErrors[tool] : undefined}
                                 />
                             )}
-                            <Link href="/" className={`link ${styles.returnLink}`}>
-                                <Button>Return to site</Button>
-                            </Link>
                         </header>
                         <div className={styles.page}>{children}</div>
                         <footer className={styles.footer}>

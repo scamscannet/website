@@ -34,7 +34,7 @@
 .menu {
     display: flex;
     flex-direction: column;
-    padding: 24px 16px;
+    padding: 24px 0;
     justify-content: space-between;
     height: calc(100% - 95px);
 }
@@ -47,13 +47,15 @@
 
 .menuItem {
     display: flex;
-    border-radius: 4px;
     background: transparent;
     padding: 8px 8px 8px 0;
     align-items: center;
     height: 40px;
     gap: 8px;
+    text-decoration: none;
+    transition: all .3s ease;
 }
+.menuItem:hover,
 .menuItem.active {
     background: rgba(249, 250, 251, 0.20);
 }
@@ -71,7 +73,6 @@
     width: 3px;
     height: 100%;
     background: #fff;
-    border-radius: 50px;
 }
 
 .menuLink {
@@ -102,6 +103,7 @@
 
 .header {
     padding: 16px 48px 16px 72px;
+    min-height: 80px;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -113,10 +115,6 @@
     width: 24px;
     height: 24px;
     display: none;
-}
-
-.returnLink {
-    margin-left: auto;
 }
 
 .page {
@@ -185,15 +183,13 @@
     }
     .header {
         padding: 4px 12px;
+        min-height: 68px;
         height: 68px;
         justify-content: unset;
         gap: 24px;
     }
     .menuIcon {
         display: block;
-    }
-    .returnLink {
-        display: none;
     }
 }
 

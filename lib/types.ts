@@ -71,3 +71,19 @@ export type Article = {
 export type ToolStatus ={ hasResult: boolean, failed: boolean };
 
 export type ScrapingNode = Schemas['PublicNodes'];
+
+export type TakedownStatus = 'Reported' | 'Verified' | 'Abuse reports sent' | 'Taken down';
+
+export type Takedown = {
+    domain: string
+    category: string
+    created: string
+    lastUpdate: string
+    status: TakedownStatus
+    registrar: string
+    hostingProvider: string
+    ip: string
+    country: string
+    description: string
+    events: { status: TakedownStatus, date: string, note: string }[]
+};

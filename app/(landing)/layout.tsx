@@ -95,9 +95,11 @@ const Footer = () => (
                 <a href="#" className="link">Privacy Policy</a>
                 <a href="#" className="link">Terms &amp; Conditions</a>
                 <div className={styles.socialLinks}>
-                    <a href="#" className="link"><TelegramIcon /></a>
-                    <a href="#" className="link"><LinkedInIcon /></a>
-                    <a href="#" className="link"><XTwitterIcon /></a>
+                    <a href="https://www.linkedin.com/in/felixpf/" className="link"><LinkedInIcon /></a>
+                    {/*
+                        <a href="#" className="link"><XTwitterIcon /></a>
+                        <a href="#" className="link"><TelegramIcon /></a>
+                    */ }
                 </div>
             </li>
         </ul>
