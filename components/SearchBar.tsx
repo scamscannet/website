@@ -53,7 +53,7 @@ export const SearchBar = ({ onSubmit, placeholder = 'Enter a domain or URL (e.g.
 };
 
 type HeaderSearchBarProps = {
-    tool: '/scam-check' | '/whois-query'
+    tool: '/app/scam-check' | '/app/whois-query'
     placeholder?: string
     errorText?: string
 };
@@ -62,7 +62,7 @@ export const HeaderSearchBar = ({ tool, placeholder = 'Enter a domain or URL (e.
     const goToTool = useGoToTool();
     const [value, setValue] = useState('');
     const [invalid, setInvalid] = useState(false);
-    const isValid = (input: string) => urlRegex.test(input) || domainRegex.test(input) || (tool === '/whois-query' && ipv4Regex.test(input));
+    const isValid = (input: string) => urlRegex.test(input) || domainRegex.test(input) || (tool === '/app/whois-query' && ipv4Regex.test(input));
 
     const submit = (event: FormEvent) => {
         event.preventDefault();

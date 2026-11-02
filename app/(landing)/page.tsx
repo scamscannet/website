@@ -87,7 +87,7 @@ export default function HomePage() {
                         Instant <span className={styles.gradientText}>Scam Check</span>
                     </h1>
                     <SectionSubtitle>Enter the domain or URL below to ensure a scam-free experience</SectionSubtitle>
-                    <SearchBar onSubmit={(value) => router.push(`/scam-check#${value}`)} />
+                    <SearchBar onSubmit={(value) => router.push(`/app/scam-check#${value}`)} />
                 </div>
             </section>
 

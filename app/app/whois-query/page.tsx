@@ -36,7 +36,7 @@ export default function WhoisQueryPage() {
         }
 
         if (!domainRegex.test(hash) && !ipv4Regex.test(hash)) {
-            router.replace('/whois-query');
+            router.replace('/app/whois-query');
             return;
         }
 
@@ -63,7 +63,7 @@ export default function WhoisQueryPage() {
                             including registration information, ownership, and more
                         </SectionSubtitle>
                     </div>
-                    <SearchBar whois placeholder="Enter a domain or IP address" onSubmit={(value) => goToTool('/whois-query', value)} />
+                    <SearchBar whois placeholder="Enter a domain or IP address" onSubmit={(value) => goToTool('/app/whois-query', value)} />
                     {failed && <SectionSubtitle className={tools.errorMessage}>No data available for {hash}.</SectionSubtitle>}
                 </>
             )}

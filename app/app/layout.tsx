@@ -11,9 +11,9 @@ import type { ToolStatus } from '@/lib/types';
 import styles from './tools.module.css';
 
 const toolLinks = [
-    { label: 'Scam Check', Icon: ScamCheckIcon, href: '/scam-check', paths: ['/scam-check'] },
-    { label: 'Takedown Tracker', Icon: TakedownIcon, href: '/takedown', paths: ['/takedown'] },
-    { label: 'Tools', Icon: ToolsIcon, href: '/tools', paths: ['/tools', '/whois-query', '/domain-zone'] },
+    { label: 'Scam Check', Icon: ScamCheckIcon, href: '/app/scam-check', paths: ['/app/scam-check'] },
+    { label: 'Takedown Tracker', Icon: TakedownIcon, href: '/app/takedown', paths: ['/app/takedown'] },
+    { label: 'Tools', Icon: ToolsIcon, href: '/app/tools', paths: ['/app/tools', '/app/whois-query', '/app/domain-zone'] },
 ];
 
 const footerLinks = [
@@ -25,8 +25,8 @@ const footerLinks = [
 ];
 
 const headerErrors: Record<string, string> = {
-    '/scam-check': 'No scrape available for this url.',
-    '/whois-query': 'No scrape available for this domain/ip.',
+    '/app/scam-check': 'No scrape available for this url.',
+    '/app/whois-query': 'No scrape available for this domain/ip.',
 };
 
 export default function ToolsLayout({ children }: { children: React.ReactNode }) {
@@ -38,7 +38,7 @@ export default function ToolsLayout({ children }: { children: React.ReactNode })
     const openReportModal = useCallback(() => setIsModalOpen(true), []);
     const closeReportModal = useCallback(() => setIsModalOpen(false), []);
     const closeMenu = () => setIsMenuOpen(false);
-    const tool = pathname === '/whois-query' ? '/whois-query' : '/scam-check';
+    const tool = pathname === '/app/whois-query' ? '/app/whois-query' : '/app/scam-check';
 
     useBodyScrollLock(isMenuOpen || isModalOpen);
 

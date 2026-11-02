@@ -42,41 +42,62 @@
 .menuItems {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 4px;
 }
 
+/* Square side nav states: hover lightens, active adds a 4px accent bar on the left edge */
 .menuItem {
     display: flex;
+    position: relative;
     background: transparent;
     padding: 8px 8px 8px 0;
     align-items: center;
-    height: 40px;
+    height: 48px;
     gap: 8px;
+    color: var(--text-grey-light);
     text-decoration: none;
-    transition: all .3s ease;
+    transition: background-color .11s ease, color .11s ease;
 }
-.menuItem:hover,
+.menuItem:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+.menuItem:active {
+    background: rgba(255, 255, 255, 0.16);
+}
 .menuItem.active {
-    background: rgba(249, 250, 251, 0.20);
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+.menuItem.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--violet), var(--purple));
+}
+.menuItem:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -2px;
+}
+
+/* Icons follow the item's text color */
+.menuItem svg [fill]:not([fill="none"]) {
+    fill: currentColor;
+}
+.menuItem svg [stroke] {
+    stroke: currentColor;
 }
 
 .activeMarker {
     width: 18px;
-    height: 22px;
-    position: relative;
-}
-.active .activeMarker::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 3px;
-    height: 100%;
-    background: #fff;
 }
 
 .menuLink {
-    color: white;
+    padding: 0;
+    color: inherit;
 }
 
 .overlay {

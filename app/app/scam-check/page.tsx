@@ -95,7 +95,7 @@ export default function ScamCheckPage() {
                     <SectionTitle className={tools.title}>Welcome to ScamScan!</SectionTitle>
                     <SectionSubtitle className={tools.subtitle}>Enter a website URL to check if it's safe</SectionSubtitle>
                 </div>
-                <SearchBar onSubmit={(value) => goToTool('/scam-check', value)} />
+                <SearchBar onSubmit={(value) => goToTool('/app/scam-check', value)} />
                 {failed && (
                     <SectionSubtitle className={tools.errorMessage}>No scrape available for {hash || 'this url'}.</SectionSubtitle>
                 )}
@@ -158,7 +158,7 @@ export default function ScamCheckPage() {
                     <div className={styles.tables}>
                         <InfoTable
                             title="Domain"
-                            detailsLink={`/whois-query#${result.domain}`}
+                            detailsLink={`/app/whois-query#${result.domain}`}
                             rows={[
                                 { key: 'Registrar', value: result.registrar },
                                 { key: 'Registration date', value: result.registrationDate },
@@ -167,7 +167,7 @@ export default function ScamCheckPage() {
                         />
                         <InfoTable
                             title="IP"
-                            detailsLink={`/whois-query#${result.ip}`}
+                            detailsLink={`/app/whois-query#${result.ip}`}
                             rows={[
                                 { key: 'IP', value: result.ip },
                                 { key: 'Country', value: result.country },

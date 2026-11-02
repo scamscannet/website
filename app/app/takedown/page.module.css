@@ -1,0 +1,219 @@
+/* List: same table design as the domain zone page */
+
+.tableContainer {
+    display: flex;
+    max-width: 1064px;
+    width: 100%;
+    flex-direction: column;
+}
+
+.tableWrapper {
+    display: flex;
+    border-radius: 4px;
+    border: 1px solid #F5F5F5;
+    box-shadow: 0 2px 12px 0 rgba(101, 101, 101, 0.03);
+}
+
+.table {
+    width: 100%;
+}
+
+.thead {
+    background: #F5F5F5;
+    width: 100%;
+    display: block;
+    border-radius: 4px;
+}
+.thead .tr {
+    border-top: 0;
+}
+.thead .td {
+    font-weight: 600;
+    height: 44px;
+    font-family: var(--font-semibold);
+}
+
+.tr {
+    display: grid;
+    border-top: 1px solid #F5F5F5;
+    grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)) minmax(0, 1.4fr);
+}
+.clickable {
+    cursor: pointer;
+    transition: all .3s ease;
+}
+.clickable:hover {
+    background: #F9FAFB;
+}
+
+.td {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    padding: 12px 24px;
+    color: var(--text-grey);
+    font-family: var(--font-regular);
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.domainLink {
+    color: var(--purple);
+    font-weight: 500;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+.chip {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-family: var(--font-semibold);
+    white-space: nowrap;
+}
+.Reported { background: #F5F5F5; color: #344054; }
+.Verified,
+.Abusereportssent { background: #FFFBF1; color: #DF9300; }
+.Takendown { background: #ECFDF3; color: #067647; }
+
+/* Detail */
+
+.backLink {
+    color: var(--purple);
+    font-size: 14px;
+    line-height: 17px;
+    text-decoration: none;
+}
+
+.domainRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.domain {
+    color: var(--text-black);
+    font-size: 28px;
+    line-height: 32px;
+    overflow-wrap: anywhere;
+}
+
+.lastUpdate {
+    color: var(--grey-info);
+    font-size: 12px;
+    line-height: 14px;
+    white-space: nowrap;
+}
+
+.description {
+    color: var(--text-grey);
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    align-items: start;
+}
+
+.tracker {
+    border: 1px solid #F5F5F5;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(101, 101, 101, 0.03);
+}
+
+.trackerHead {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    padding: 12px 24px;
+    background: #F9FAFB;
+    border-bottom: 1px solid #F5F5F5;
+    color: var(--text-grey);
+    font-family: var(--font-semibold);
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.steps {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+}
+
+.step {
+    position: relative;
+    display: flex;
+    gap: 16px;
+    padding-bottom: 32px;
+}
+.step:last-child {
+    padding-bottom: 0;
+}
+/* Line connecting the dots */
+.step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 7px;
+    width: 2px;
+    height: calc(100% - 16px);
+    background: var(--grey-light);
+}
+.done:not(:last-child)::before {
+    background: var(--purple);
+}
+
+.dot {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--grey-light);
+    border-radius: 50%;
+    background: #fff;
+}
+.done .dot {
+    border-color: var(--purple);
+    background: var(--purple);
+}
+.current .dot {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 4px rgba(96, 35, 250, 0.20);
+}
+
+.stepTitle {
+    color: var(--text-black);
+    font-family: var(--font-semibold);
+    font-size: 16px;
+    line-height: 16px;
+}
+.pending .stepTitle {
+    color: var(--text-grey-light);
+}
+
+.stepText {
+    margin-top: 4px;
+    color: var(--text-grey);
+    font-size: 14px;
+    line-height: 20px;
+}
+
+@media (max-width: 960px) {
+    .tableContainer {
+        overflow-x: auto;
+    }
+    .tableWrapper {
+        width: 760px;
+    }
+    .details {
+        grid-template-columns: 1fr;
+    }
+    .domainRow {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

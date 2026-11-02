@@ -57,7 +57,7 @@ const Header = ({ openReportModal }: { openReportModal: () => void }) => {
                     </Link>
                 </li>
                 <li className={`${styles.column} ${styles.searchColumn}`}>
-                    <HeaderSearchBar tool="/scam-check" />
+                    <HeaderSearchBar tool="/app/scam-check" />
                 </li>
                 <li className={styles.column}>
                     <div className={styles.links}>
@@ -68,7 +68,7 @@ const Header = ({ openReportModal }: { openReportModal: () => void }) => {
                             <span className={styles.anchorLink} onClick={goToContacts}>Contacts</span>
                         </nav>
                         <Button variant="outlined" className={styles.reportButton} onClick={openReportModal}>Report a Scam</Button>
-                        <Link href="/scam-check" className={`link ${styles.openAppLink}`}>
+                        <Link href="/app/scam-check" className={`link ${styles.openAppLink}`}>
                             <Button>Open App</Button>
                         </Link>
                     </div>
