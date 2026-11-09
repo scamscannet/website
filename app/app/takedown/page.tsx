@@ -4,8 +4,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { SectionSubtitle, SectionTitle } from '@/components/ui';
 import { takedownsMock } from '@/lib/mocks';
+import { texts } from '@/lib/texts';
 import tools from '../tools.module.css';
 import styles from './page.module.css';
+
+const t = texts.takedown;
 
 const StatusChip = ({ status }: { status: string }) => (
     <span className={`${styles.chip} ${styles[status.replaceAll(' ', '')]}`}>{status}</span>
@@ -17,19 +20,19 @@ export default function TakedownPage() {
     return (
         <section className={tools.section}>
             <div className={tools.intro}>
-                <SectionTitle className={tools.title}>Takedown Tracker</SectionTitle>
-                <SectionSubtitle className={tools.subtitle}>Follow every scam site we work on taking down</SectionSubtitle>
+                <SectionTitle as="h1" className={tools.title}>{t.title}</SectionTitle>
+                <SectionSubtitle className={tools.subtitle}>{t.subtitle}</SectionSubtitle>
             </div>
             <div className={styles.tableContainer}>
                 <div className={styles.tableWrapper}>
                     <table className={styles.table}>
                         <thead className={styles.thead}>
                             <tr className={styles.tr}>
-                                <td className={styles.td}>Domain</td>
-                                <td className={styles.td}>Created</td>
-                                <td className={styles.td}>Last update</td>
-                                <td className={styles.td}>Category</td>
-                                <td className={styles.td}>Status</td>
+                                <td className={styles.td}>{t.columns.domain}</td>
+                                <td className={styles.td}>{t.columns.reported}</td>
+                                <td className={styles.td}>{t.columns.lastUpdate}</td>
+                                <td className={styles.td}>{t.columns.category}</td>
+                                <td className={styles.td}>{t.columns.status}</td>
                             </tr>
                         </thead>
                         <tbody>

@@ -1,4 +1,20 @@
-import type { IpWhois, Takedown } from './types';
+import type { IpWhois, ScrapingNode, Takedown, TldList } from './types';
+
+export const tldsMock: TldList['tlds'] = [
+    { tld: 'com', registrar: 'Verisign', last_update: '2026-11-08T00:00:00Z', count: 160452311 },
+    { tld: 'net', registrar: 'Verisign', last_update: '2026-11-08T00:00:00Z', count: 12871204 },
+    { tld: 'org', registrar: 'Public Interest Registry', last_update: '2026-11-08T00:00:00Z', count: 11032287 },
+    { tld: 'de', registrar: 'DENIC eG', last_update: '2026-11-07T00:00:00Z', count: 17781455 },
+    { tld: 'io', registrar: 'Identity Digital', last_update: '2026-11-07T00:00:00Z', count: 1102944 },
+    { tld: 'shop', registrar: 'GMO Registry', last_update: '2026-11-06T00:00:00Z', count: 4210377 },
+    { tld: 'store', registrar: 'Radix', last_update: '2026-11-06T00:00:00Z', count: 1630098 },
+    { tld: 'xyz', registrar: 'XYZ.COM LLC', last_update: '2026-11-05T00:00:00Z', count: 3871502 },
+];
+
+export const nodesMock: ScrapingNode[] = [
+    { name: 'node-1', node_id: '3f7c2a1e-6b0d-4f1a-9c3e-1d2b5a8e7f60', last_seen: '2026-11-09T08:12:00Z', completed_jobs: 1284, failed_jobs: 17 },
+    { name: 'node-2', node_id: 'a91d4e5b-2c7f-4e8a-b6d0-9f3c1e2a4b57', last_seen: '2026-11-09T07:58:00Z', completed_jobs: 932, failed_jobs: 41 },
+];
 
 // Static stand-in for the takedown API until it exists.
 export const takedownsMock: Takedown[] = [
@@ -14,7 +30,7 @@ export const takedownsMock: Takedown[] = [
         country: 'United States',
         description: 'Fake PayPal login page collecting credentials and card details.',
         events: [
-            { status: 'Reported', date: '2026-10-28', note: 'Reported by a user through the scam check.' },
+            { status: 'Reported', date: '2026-10-28', note: 'Reported by a user through the website check.' },
             { status: 'Verified', date: '2026-10-28', note: 'Phishing kit confirmed by our team.' },
             { status: 'Abuse reports sent', date: '2026-10-29', note: 'Reports sent to the registrar and hosting provider.' },
             { status: 'Taken down', date: '2026-11-01', note: 'Domain suspended by the registrar.' },

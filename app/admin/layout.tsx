@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { getMe } from '@/lib/api';
+import { texts } from '@/lib/texts';
 import styles from './admin.module.css';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -22,7 +23,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
     return (
         <main className={styles.page}>
-            <Link href="/admin" className={styles.title}>Admin</Link>
+            <Link href="/admin" className={styles.title}>{texts.admin.title}</Link>
             {children}
         </main>
     );

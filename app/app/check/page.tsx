@@ -1,0 +1,136 @@
+'use client';
+
+import { useEffect, useState, type ReactNode } from 'react';
+import { Button, SectionSubtitle, SectionTitle } from '@/components/ui';
+import { SearchBar } from '@/components/SearchBar';
+import { StatusChip } from '@/components/ScamCheckWidgets';
+import { getReport, getVerdict } from '@/lib/api';
+import { useGoToTool, useHash, useOpenReportModal, useReportToolStatus } from '@/lib/hooks';
+import { texts } from '@/lib/texts';
+import type { DomainReport, ScamStatus, Verdict } from '@/lib/types';
+import tools from '../tools.module.css';
+import styles from './page.module.css';
+
+const t = texts.check;
+
+const VERDICT_CHIP: Record<Verdict, ScamStatus> = { trusted: 'Safe', blocked: 'Scam', unknown: 'Unclassified' };
+
+/** "https://shop.example.com/path" -> "shop.example.com" */
+const toDomain = (url: string) => {
+    try {
+        return new URL(url.includes('://') ? url : `https://${url}`).hostname;
+    } catch {
+        return url;
+    }
+};
+
+type Loaded<T> = { key: string, data?: T, failed?: boolean };
+
+/** Runs `load` whenever `key` changes; returns undefined while loading. */
+const useLoad = <T,>(key: string, load: () => Promise<T>) => {
+    const [state, setState] = useState<Loaded<T>>();
+
+    useEffect(() => {
+        let active = true;
+        load()
+            .then((data) => active && setState({ key, data }))
+            .catch(() => active && setState({ key, failed: true }));
+
+        return () => {
+            active = false;
+        };
+    }, [key]);
+
+    return state?.key === key ? state : undefined;
+};
+
+const Card = ({ title, className, children }: { title: string, className?: string, children: ReactNode }) => (
+    <div className={`${styles.card} ${className ?? ''}`}>
+        <div className={styles.cardHead}>{title}</div>
+        <div className={styles.cardBody}>{children}</div>
+    </div>
+);
+
+const CardState = <T,>({ state, children }: { state?: Loaded<T>, children: (data: T) => ReactNode }) => {
+    if (!state) return <p className={styles.text}>{t.loading}</p>;
+    if (state.failed) return <p className={styles.text}>{t.failed}</p>;
+
+    return children(state.data as T);
+};
+
+const Placeholder = ({ title, text }: { title: string, text: string }) => (
+    <Card title={title}>
+        <div className={styles.placeholder}>{text}</div>
+    </Card>
+);
+
+const ReportRows = ({ report }: { report: NonNullable<DomainReport['report']> }) => (
+    <dl className={styles.rows}>
+        <dt>{t.reports.status}</dt>
+        <dd>{report.status}</dd>
+        <dt>{t.reports.reported}</dt>
+        <dd>{new Date(report.timestamp).toLocaleDateString()}</dd>
+        <dt>{t.reports.count}</dt>
+        <dd>{report.report_count}</dd>
+    </dl>
+);
+
+const WebsiteResult = ({ url }: { url: string }) => {
+    const openReportModal = useOpenReportModal();
+    const domain = toDomain(url);
+    const verdict = useLoad(url, () => getVerdict(url));
+    const report = useLoad(domain, () => getReport(domain));
+
+    return (
+        <div className={styles.result}>
+            <div>
+                <h1 className={styles.domain}>{domain}</h1>
+                {domain !== url && <p className={styles.url}>{url}</p>}
+            </div>
+
+            <div className={styles.cards}>
+                <Card title={t.verdict.title}>
+                    <CardState state={verdict}>
+                        {(data) => (
+                            <>
+                                <StatusChip status={VERDICT_CHIP[data]} />
+                                <p className={styles.text}>{t.verdict[data]}</p>
+                            </>
+                        )}
+                    </CardState>
+                </Card>
+                <Card title={t.reports.title}>
+                    <CardState state={report}>
+                        {(data) => data.report ? <ReportRows report={data.report} /> : <p className={styles.text}>{t.reports.none}</p>}
+                    </CardState>
+                    <Button type="button" variant="outlined" className={styles.reportButton} onClick={openReportModal}>{t.report.button}</Button>
+                </Card>
+            </div>
+
+            <Placeholder {...t.takedown} />
+            <Placeholder {...t.scrape} />
+            <Placeholder {...t.geolocation} />
+        </div>
+    );
+};
+
+export default function WebsiteCheckPage() {
+    const hash = useHash();
+    const goToTool = useGoToTool();
+
+    useReportToolStatus({ hasResult: hash !== '', failed: false });
+
+    return (
+        <section className={tools.section}>
+            {hash ? <WebsiteResult url={hash} /> : (
+                <>
+                    <div className={tools.intro}>
+                        <SectionTitle as="h1" className={tools.title}>{t.title}</SectionTitle>
+                        <SectionSubtitle className={tools.subtitle}>{t.subtitle}</SectionSubtitle>
+                    </div>
+                    <SearchBar onSubmit={(value) => goToTool('/app/check', value)} />
+                </>
+            )}
+        </section>
+    );
+}

@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 export default function AppPage() {
     const router = useRouter();
 
-    useEffect(() => router.replace('/app/scam-check'), [router]);
+    useEffect(() => router.replace('/app/check'), [router]);
 
     return null;
 }

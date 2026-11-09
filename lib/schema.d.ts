@@ -21,34 +21,52 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/lists": {
+    "/verdicts": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** GetListForDomain */
-        get: operations["ListsGetListForDomain"];
+        /** GetVerdictForUrl */
+        get: operations["VerdictsGetVerdictForUrl"];
         put?: never;
         /** AddOrUpdateDomain */
-        post: operations["ListsAddOrUpdateDomain"];
-        /** RemoveDomainFromDirectory */
-        delete: operations["ListsRemoveDomainFromDirectory"];
+        post: operations["VerdictsAddOrUpdateDomain"];
+        /** DeleteDomain */
+        delete: operations["VerdictsDeleteDomain"];
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/lists/{category}": {
+    "/snapshots/scrape/job": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** GetCompleteListForCategory */
-        get: operations["ListsCategoryGetCompleteListForCategory"];
+        /** GetCurrentStateOfAScrapingJob */
+        get: operations["SnapshotsScrapeJobGetCurrentStateOfAScrapingJob"];
+        put?: never;
+        /** RequestNewScrape */
+        post: operations["SnapshotsScrapeJobRequestNewScrape"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/snapshots/image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GetScreenshotForScrape */
+        get: operations["SnapshotsImageGetScreenshotForScrape"];
         put?: never;
         post?: never;
         delete?: never;
@@ -57,103 +75,17 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/lists/admin/{category}": {
+    "/snapshots": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** GetCompleteListForCategoryAdminOnly */
-        get: operations["ListsAdminCategoryGetCompleteListForCategoryAdminOnly"];
+        /** GetSnapshotForUrl */
+        get: operations["SnapshotsGetSnapshotForUrl"];
         put?: never;
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/lists/tag/{tag}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** GetDomainsByTag */
-        get: operations["ListsTagGetDomainsByTag"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/report/comment": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** AddCommentForDomain */
-        post: operations["ReportCommentAddCommentForDomain"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/report/claim": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** ClaimReport */
-        get: operations["ReportClaimClaimReport"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/report/complete": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** CompleteReportForDomain */
-        post: operations["ReportCompleteCompleteReportForDomain"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/report": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** GetReportForDomain */
-        get: operations["ReportGetReportForDomain"];
-        put?: never;
-        /** CreateNewReportForDomain */
-        post: operations["ReportCreateNewReportForDomain"];
         delete?: never;
         options?: never;
         head?: never;
@@ -177,7 +109,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/report/vote": {
+    "/report/{url}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** GetReportForDomain */
+        get: operations["ReportUrlGetReportForDomain"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/report": {
         parameters: {
             query?: never;
             header?: never;
@@ -186,199 +135,9 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** VoteOnReportForDomain */
-        post: operations["ReportVoteVoteOnReportForDomain"];
+        /** ReportDomain */
+        post: operations["ReportReportDomain"];
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/registry/scrape/job": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** GetCurrentStateOfAScrapingJob */
-        get: operations["RegistryScrapeJobGetCurrentStateOfAScrapingJob"];
-        put?: never;
-        /** RequestNewScrape */
-        post: operations["RegistryScrapeJobRequestNewScrape"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/registry/image": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** GetScreenshotForScrape */
-        get: operations["RegistryImageGetScreenshotForScrape"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/registry": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** GetWebsiteDataForUrl */
-        get: operations["RegistryGetWebsiteDataForUrl"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/kdb/add": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** AddDomainIfNotExisting */
-        post: operations["KdbAddAddDomainIfNotExisting"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/kdb/stats": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** GetStatsForTheKdd */
-        get: operations["KdbStatsGetStatsForTheKdd"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/kdb/tlds/download": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** GetTldDownload */
-        get: operations["KdbTldsDownloadGetTldDownload"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/kdb/tlds/list": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** GetTldsList */
-        get: operations["KdbTldsListGetTldsList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/kdb/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** SearchInDomainDatabase */
-        get: operations["KdbSearchSearchInDomainDatabase"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/dispatcher/node": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** GetAllNodesForUser */
-        get: operations["DispatcherNodeGetAllNodesForUser"];
-        put?: never;
-        /** CreateNewNodeForUser */
-        post: operations["DispatcherNodeCreateNewNodeForUser"];
-        /** DeleteNodeForUser */
-        delete: operations["DispatcherNodeDeleteNodeForUser"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/dispatcher/node/create": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** CreateNode */
-        post: operations["DispatcherNodeCreateCreateNode"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/dispatcher/node/delete/{node_id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /** DeleteNode */
-        delete: operations["DispatcherNodeDeleteNodeIdDeleteNode"];
         options?: never;
         head?: never;
         patch?: never;
@@ -401,41 +160,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/dispatcher/job": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** GetJobForNode */
-        get: operations["DispatcherJobGetJobForNode"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/dispatcher/node/list": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Nodes */
-        get: operations["DispatcherNodeListNodes"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/registry/node/upload/image": {
+    "/nodes/snapshots/upload/image": {
         parameters: {
             query?: never;
             header?: never;
@@ -445,14 +170,14 @@ export interface paths {
         get?: never;
         put?: never;
         /** UploadImageForScrape */
-        post: operations["RegistryNodeUploadImageUploadImageForScrape"];
+        post: operations["NodesSnapshotsUploadImageUploadImageForScrape"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/registry/node/upload/scrape": {
+    "/nodes/snapshots/upload/scrape": {
         parameters: {
             query?: never;
             header?: never;
@@ -462,7 +187,7 @@ export interface paths {
         get?: never;
         put?: never;
         /** UploadScrape */
-        post: operations["RegistryNodeUploadScrapeUploadScrape"];
+        post: operations["NodesSnapshotsUploadScrapeUploadScrape"];
         delete?: never;
         options?: never;
         head?: never;
@@ -548,16 +273,10 @@ export interface components {
             html: string;
             javascript: components["schemas"]["JavaScript"];
         };
-        /** CrateNodeResponse */
-        CrateNodeResponse: {
-            /** @default success */
-            status: string;
-            node_id: string;
-        };
-        /** CreateNodeResponse */
-        CreateNodeResponse: {
-            node_id: string;
-            secret: string;
+        /** CombinedScrapingResult */
+        CombinedScrapingResult: {
+            website_data: components["schemas"]["WebsiteData"];
+            redirect_data?: components["schemas"]["WebsiteData"] | null;
         };
         /** Domain */
         Domain: {
@@ -574,102 +293,29 @@ export interface components {
             fragment: string;
             parameters?: unknown[];
         };
-        /** DomainListAddRequest */
-        DomainListAddRequest: {
-            url: string;
-            /** @enum {string} */
-            category: "allowlist" | "blocklist" | "watchlist" | "scamscanlist" | "trustlist";
-            tags: ("blockchain" | "banking" | "logistics") | ("blockchain" | "banking" | "logistics")[] | null;
+        /** DomainReportRequest */
+        DomainReportRequest: {
+            domain: string;
         };
-        /** DomainListCompleteResponse */
-        DomainListCompleteResponse: {
-            /** @enum {string} */
-            category: "allowlist" | "blocklist" | "watchlist" | "scamscanlist" | "trustlist";
-            /**
-             * @default [
-             *       "google.de"
-             *     ]
-             */
-            domains: unknown[];
-        };
-        /** DomainListSingleResponse */
-        DomainListSingleResponse: {
-            /**
-             * @default allowlist
-             * @enum {string}
-             */
-            status: "allowlist" | "blocklist" | "watchlist" | "scamscanlist" | "trustlist";
+        /** DomainReportResponse */
+        DomainReportResponse: {
+            has_reports: boolean;
+            report?: components["schemas"]["PublicDomainReport"] | null;
         };
         /** DomainReportsAllResponse */
         DomainReportsAllResponse: {
-            /** @default 0 */
+            reports: components["schemas"]["PublicDomainReport"][];
             count: number;
-            /** @default [] */
-            reports: components["schemas"]["DomainReportsPublicReport"][];
             pagination: components["schemas"]["Pagination"];
         };
-        /** DomainReportsCommentRequest */
-        DomainReportsCommentRequest: {
-            report_id: string;
-            comment: string;
-            answer_to?: string;
-        };
-        /** DomainReportsComplete */
-        DomainReportsComplete: {
+        /** DomainVerdictResponse */
+        DomainVerdictResponse: {
             /** @enum {string} */
-            decision: "open" | "rejected" | "rejected_with_lock" | "confirmed_without_abuse_case" | "confirmed_with_abuse_case" | "confirmed_by_name" | "closed_offline";
-            report_id: string;
-        };
-        /** DomainReportsExistingReportCheck */
-        DomainReportsExistingReportCheck: {
-            /** @default true */
-            existing: boolean;
-            report: components["schemas"]["DomainReportsPublicReport"] | null;
-        };
-        /** DomainReportsNewReportRequest */
-        DomainReportsNewReportRequest: {
-            url: string;
-            /** @default  */
-            comment: string;
-            /** @default  */
-            email: string;
-            /** @default  */
-            source: string;
+            verdict: "blocked" | "trusted" | "unknown";
             /** @default false */
-            contact_allowed: boolean;
-            tags: ("blockchain" | "banking" | "logistics") | ("blockchain" | "banking" | "logistics")[] | null;
-        };
-        /** DomainReportsNewReportResponse */
-        DomainReportsNewReportResponse: {
-            /**
-             * @default success
-             * @enum {string}
-             */
-            status: "success" | "warning";
-            message?: string;
-            report_id: string;
-        };
-        /** DomainReportsPublicReport */
-        DomainReportsPublicReport: {
-            url: string;
-            report_id: string;
-            /** Format: date-time */
-            timestamp: string;
-            /** @enum {string} */
-            status: "open" | "rejected" | "rejected_with_lock" | "confirmed_without_abuse_case" | "confirmed_with_abuse_case" | "confirmed_by_name" | "closed_offline";
-            /** @default 1 */
-            report_count: number;
-            reference_scrape?: string;
-        };
-        /** DomainTagResponse */
-        DomainTagResponse: {
-            tag: string;
-            /**
-             * @default [
-             *       "google.de"
-             *     ]
-             */
-            domains: unknown[];
+            is_blocked: boolean;
+            /** @default false */
+            is_trusted: boolean;
         };
         /** FormData */
         FormData: {
@@ -677,11 +323,6 @@ export interface components {
             full?: string;
             /** Format: binary */
             visible?: string;
-        };
-        /** GetNodesResponse */
-        GetNodesResponse: {
-            /** @default [] */
-            nodes: components["schemas"]["PublicNodes"][];
         };
         /** JavaScript */
         JavaScript: {
@@ -703,34 +344,6 @@ export interface components {
             created: string;
             /** Format: date-time */
             last_updated: string;
-        };
-        /** KnownDomainDatabaseAdd */
-        KnownDomainDatabaseAdd: {
-            domain: string;
-            tld: string;
-            subdomain: string | null;
-        };
-        /** KnownDomainDatabaseList */
-        KnownDomainDatabaseList: {
-            tlds: components["schemas"]["TldInfo"][];
-            pagination: components["schemas"]["Pagination"];
-        };
-        /** KnownDomainDatabaseSearchResponse */
-        KnownDomainDatabaseSearchResponse: {
-            results: components["schemas"]["SingleDomainResult"][];
-        };
-        /** KnownDomainDatabaseStatsResponse */
-        KnownDomainDatabaseStatsResponse: {
-            /** @default 0 */
-            total: number;
-            /** @default 0 */
-            yesterday: number;
-            /** @default 0 */
-            last_week: number;
-            /** @default 0 */
-            last_month: number;
-            /** @default 0 */
-            lasy_year: number;
         };
         /** Links */
         Links: {
@@ -759,37 +372,25 @@ export interface components {
             ip: string;
             node_id: string;
         };
-        /** NodeJobResponse */
-        NodeJobResponse: {
-            domain: components["schemas"]["Domain"];
-            assignment_id: string;
-        };
         /** Pagination */
         Pagination: {
             current_page: number;
             last_page: number;
             per_page: number;
         };
-        /** PublicNodes */
-        PublicNodes: {
-            name: string;
-            node_id: string;
+        /** PublicDomainReport */
+        PublicDomainReport: {
+            report_id: string;
             /** Format: date-time */
-            last_seen: string;
-            completed_jobs: number;
-            failed_jobs: number;
+            timestamp: string;
+            status: string;
+            report_count: number;
+            domain: string;
         };
         /** Server */
         Server: {
             ip: string;
             whois: Record<string, never>;
-        };
-        /** SingleDomainResult */
-        SingleDomainResult: {
-            full_domain: string;
-            domain: string;
-            tld: string;
-            subdomain: string | null;
         };
         /** StatusResponse */
         StatusResponse: {
@@ -800,16 +401,11 @@ export interface components {
             status: "success" | "warning";
             message?: string;
         };
-        /** TldInfo */
-        TldInfo: {
-            /** @default com */
-            tld: string;
-            /** @default ICANN */
-            registrar: string;
-            /** Format: date-time */
-            last_update: string;
-            /** @default 230 */
-            count: number;
+        /** SubmitDomainVerdictRequest */
+        SubmitDomainVerdictRequest: {
+            /** @enum {string} */
+            verdict: "blocked" | "trusted";
+            url: string;
         };
         /** User */
         User: {
@@ -831,12 +427,6 @@ export interface components {
         UserRegisterRequest: {
             email: string;
             password: string;
-        };
-        /** VoteRequest */
-        VoteRequest: {
-            report_id: string;
-            /** @enum {string} */
-            decision: "up" | "down";
         };
         /** WebsiteData */
         WebsiteData: {
@@ -887,7 +477,7 @@ export interface operations {
             };
         };
     };
-    ListsGetListForDomain: {
+    VerdictsGetVerdictForUrl: {
         parameters: {
             query: {
                 url: string;
@@ -904,7 +494,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DomainListSingleResponse"];
+                    "application/json": components["schemas"]["DomainVerdictResponse"];
                 };
             };
             /** @description Bad request syntax or unsupported method */
@@ -924,7 +514,7 @@ export interface operations {
             };
         };
     };
-    ListsAddOrUpdateDomain: {
+    VerdictsAddOrUpdateDomain: {
         parameters: {
             query?: never;
             header?: never;
@@ -933,7 +523,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["DomainListAddRequest"];
+                "application/json": components["schemas"]["SubmitDomainVerdictRequest"];
             };
         };
         responses: {
@@ -963,7 +553,7 @@ export interface operations {
             };
         };
     };
-    ListsRemoveDomainFromDirectory: {
+    VerdictsDeleteDomain: {
         parameters: {
             query: {
                 url: string;
@@ -998,372 +588,7 @@ export interface operations {
             };
         };
     };
-    ListsCategoryGetCompleteListForCategory: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                category: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DomainListCompleteResponse"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    ListsAdminCategoryGetCompleteListForCategoryAdminOnly: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                category: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DomainListCompleteResponse"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    ListsTagGetDomainsByTag: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                tag: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DomainTagResponse"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    ReportCommentAddCommentForDomain: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DomainReportsCommentRequest"];
-            };
-        };
-        responses: {
-            /** @description Document created, URL follows */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StatusResponse"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    ReportClaimClaimReport: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DomainReportsPublicReport"];
-                };
-            };
-        };
-    };
-    ReportCompleteCompleteReportForDomain: {
-        parameters: {
-            query?: {
-                update_blocklist?: boolean;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DomainReportsComplete"];
-            };
-        };
-        responses: {
-            /** @description Document created, URL follows */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StatusResponse"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    ReportGetReportForDomain: {
-        parameters: {
-            query: {
-                url: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DomainReportsExistingReportCheck"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    ReportCreateNewReportForDomain: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DomainReportsNewReportRequest"];
-            };
-        };
-        responses: {
-            /** @description Document created, URL follows */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DomainReportsNewReportResponse"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    ReportAllGetAllReports: {
-        parameters: {
-            query?: {
-                only_open?: boolean;
-                page?: number;
-                per_page?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DomainReportsAllResponse"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    ReportVoteVoteOnReportForDomain: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["VoteRequest"];
-            };
-        };
-        responses: {
-            /** @description Document created, URL follows */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StatusResponse"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    RegistryScrapeJobGetCurrentStateOfAScrapingJob: {
+    SnapshotsScrapeJobGetCurrentStateOfAScrapingJob: {
         parameters: {
             query: {
                 job_id: string;
@@ -1400,7 +625,7 @@ export interface operations {
             };
         };
     };
-    RegistryScrapeJobRequestNewScrape: {
+    SnapshotsScrapeJobRequestNewScrape: {
         parameters: {
             query?: never;
             header?: never;
@@ -1439,7 +664,7 @@ export interface operations {
             };
         };
     };
-    RegistryImageGetScreenshotForScrape: {
+    SnapshotsImageGetScreenshotForScrape: {
         parameters: {
             query: {
                 url: string;
@@ -1478,7 +703,7 @@ export interface operations {
             };
         };
     };
-    RegistryGetWebsiteDataForUrl: {
+    SnapshotsGetSnapshotForUrl: {
         parameters: {
             query: {
                 url: string;
@@ -1516,7 +741,82 @@ export interface operations {
             };
         };
     };
-    KdbAddAddDomainIfNotExisting: {
+    ReportAllGetAllReports: {
+        parameters: {
+            query?: {
+                page?: number;
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Request fulfilled, document follows */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainReportsAllResponse"];
+                };
+            };
+            /** @description Bad request syntax or unsupported method */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status_code: number;
+                        detail: string;
+                        extra?: null | {
+                            [key: string]: unknown;
+                        } | unknown[];
+                    };
+                };
+            };
+        };
+    };
+    ReportUrlGetReportForDomain: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                url: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Request fulfilled, document follows */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainReportResponse"];
+                };
+            };
+            /** @description Bad request syntax or unsupported method */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        status_code: number;
+                        detail: string;
+                        extra?: null | {
+                            [key: string]: unknown;
+                        } | unknown[];
+                    };
+                };
+            };
+        };
+    };
+    ReportReportDomain: {
         parameters: {
             query?: never;
             header?: never;
@@ -1525,7 +825,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["KnownDomainDatabaseAdd"];
+                "application/json": components["schemas"]["DomainReportRequest"];
             };
         };
         responses: {
@@ -1535,272 +835,8 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["StatusResponse"];
+                    "application/json": components["schemas"]["DomainReportResponse"];
                 };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    KdbStatsGetStatsForTheKdd: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["KnownDomainDatabaseStatsResponse"];
-                };
-            };
-        };
-    };
-    KdbTldsDownloadGetTldDownload: {
-        parameters: {
-            query: {
-                tld: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Stream Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    KdbTldsListGetTldsList: {
-        parameters: {
-            query?: {
-                page?: number;
-                per_page?: number;
-                q?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["KnownDomainDatabaseList"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    KdbSearchSearchInDomainDatabase: {
-        parameters: {
-            query: {
-                domain: string;
-                tld: string | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["KnownDomainDatabaseSearchResponse"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    DispatcherNodeGetAllNodesForUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetNodesResponse"];
-                };
-            };
-        };
-    };
-    DispatcherNodeCreateNewNodeForUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Document created, URL follows */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CrateNodeResponse"];
-                };
-            };
-        };
-    };
-    DispatcherNodeDeleteNodeForUser: {
-        parameters: {
-            query: {
-                node_id: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, nothing follows */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    DispatcherNodeCreateCreateNode: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Document created, URL follows */
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateNodeResponse"];
-                };
-            };
-        };
-    };
-    DispatcherNodeDeleteNodeIdDeleteNode: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                node_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, nothing follows */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
             /** @description Bad request syntax or unsupported method */
             400: {
@@ -1856,64 +892,7 @@ export interface operations {
             };
         };
     };
-    DispatcherJobGetJobForNode: {
-        parameters: {
-            query: {
-                node_id: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NodeJobResponse"];
-                };
-            };
-            /** @description Bad request syntax or unsupported method */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        status_code: number;
-                        detail: string;
-                        extra?: null | {
-                            [key: string]: unknown;
-                        } | unknown[];
-                    };
-                };
-            };
-        };
-    };
-    DispatcherNodeListNodes: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Request fulfilled, document follows */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PublicNodes"][];
-                };
-            };
-        };
-    };
-    RegistryNodeUploadImageUploadImageForScrape: {
+    NodesSnapshotsUploadImageUploadImageForScrape: {
         parameters: {
             query: {
                 assignment_id: string;
@@ -1954,7 +933,7 @@ export interface operations {
             };
         };
     };
-    RegistryNodeUploadScrapeUploadScrape: {
+    NodesSnapshotsUploadScrapeUploadScrape: {
         parameters: {
             query: {
                 assignment_id: string;
@@ -1965,7 +944,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["WebsiteData"];
+                "application/json": components["schemas"]["CombinedScrapingResult"];
             };
         };
         responses: {

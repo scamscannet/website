@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { texts } from '@/lib/texts';
+import { JsonLd, SITE_URL, siteJsonLd } from '@/lib/seo';
 import './globals.css';
 
 // Each weight is its own family (no font-weight declared), exactly like the original
@@ -10,8 +12,12 @@ const semiBold = localFont({ src: './fonts/THICCCBOI-SemiBold.ttf', variable: '-
 const bold = localFont({ src: './fonts/THICCCBOI-Bold.ttf', variable: '--font-bold', adjustFontFallback: false });
 
 export const metadata: Metadata = {
-    title: 'ScamScan',
-    description: 'Check if a website is safe, look up whois data and download domain zones.',
+    metadataBase: new URL(SITE_URL),
+    title: { default: texts.meta.home.title, template: `%s | ${texts.site.name}` },
+    description: texts.meta.home.description,
+    applicationName: texts.site.name,
+    openGraph: { siteName: texts.site.name, type: 'website', locale: 'en_US', url: '/' },
+    twitter: { card: 'summary_large_image' },
     icons: {
         icon: [
             { url: '/images/favicon/favicon.ico', sizes: 'any' },
@@ -27,6 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en" className={[regular, medium, semiBold, bold].map((font) => font.variable).join(' ')}>
             <body>
+                <JsonLd data={siteJsonLd} />
                 <div className="app-root">{children}</div>
             </body>
         </html>

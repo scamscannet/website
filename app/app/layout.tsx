@@ -8,25 +8,27 @@ import { ReportModal } from '@/components/ReportModal';
 import { LogoutIcon, MenuIcon, ScamCheckIcon, TakedownIcon, ToolsIcon } from '@/components/icons';
 import { isMobileWidth, ReportModalContext, ToolStatusContext, useBodyScrollLock, useHash } from '@/lib/hooks';
 import type { ToolStatus } from '@/lib/types';
+import { texts } from '@/lib/texts';
 import styles from './tools.module.css';
 
+const { menu } = texts.app;
+
 const toolLinks = [
-    { label: 'Scam Check', Icon: ScamCheckIcon, href: '/app/scam-check', paths: ['/app/scam-check'] },
-    { label: 'Takedown Tracker', Icon: TakedownIcon, href: '/app/takedown', paths: ['/app/takedown'] },
-    { label: 'Tools', Icon: ToolsIcon, href: '/app/tools', paths: ['/app/tools', '/app/whois-query', '/app/domain-zone'] },
+    { label: menu.check, Icon: ScamCheckIcon, href: '/app/check', paths: ['/app/check'] },
+    { label: menu.takedown, Icon: TakedownIcon, href: '/app/takedown', paths: ['/app/takedown'] },
+    { label: menu.tools, Icon: ToolsIcon, href: '/app/tools', paths: ['/app/tools', '/app/whois-query', '/app/domain-zone'] },
 ];
 
 const footerLinks = [
-    { label: 'Home', href: '/' },
-    { label: 'Blog', href: '/blog' },
-    { label: 'About us', href: '/about-us' },
-    { label: 'Privacy Policy', href: '/privacy-policy' },
-    { label: 'Terms & Conditions', href: '/terms-and-conditions' },
+    { label: texts.footer.home, href: '/' },
+    { label: texts.nav.blog, href: '/blog' },
+    { label: texts.nav.about, href: '/about-us' },
+    { label: texts.footer.privacy, href: '/privacy-policy' },
+    { label: texts.footer.terms, href: '/terms-and-conditions' },
 ];
 
 const headerErrors: Record<string, string> = {
-    '/app/scam-check': 'No scrape available for this url.',
-    '/app/whois-query': 'No scrape available for this domain/ip.',
+    '/app/whois-query': texts.app.headerErrors.whois,
 };
 
 export default function ToolsLayout({ children }: { children: React.ReactNode }) {
@@ -38,7 +40,7 @@ export default function ToolsLayout({ children }: { children: React.ReactNode })
     const openReportModal = useCallback(() => setIsModalOpen(true), []);
     const closeReportModal = useCallback(() => setIsModalOpen(false), []);
     const closeMenu = () => setIsMenuOpen(false);
-    const tool = pathname === '/app/whois-query' ? '/app/whois-query' : '/app/scam-check';
+    const tool = pathname === '/app/whois-query' ? '/app/whois-query' : '/app/check';
 
     useBodyScrollLock(isMenuOpen || isModalOpen);
 
@@ -57,7 +59,7 @@ export default function ToolsLayout({ children }: { children: React.ReactNode })
                         <div className={styles.sidebarContent}>
                             <div className={styles.logo}>
                                 <Link href="/" className="link">
-                                    <img src="/images/logo-sidebar.png" alt="ScamScan" width={72} height={48} />
+                                    <img src="/images/logo-sidebar.png" alt={texts.site.name} width={72} height={48} />
                                 </Link>
                             </div>
                             <nav className={styles.menu}>
@@ -75,7 +77,7 @@ export default function ToolsLayout({ children }: { children: React.ReactNode })
                                 <Link href="/" className={styles.menuItem}>
                                     <div className={styles.activeMarker} />
                                     <LogoutIcon />
-                                    <span className={`link ${styles.menuLink}`}>Return to site</span>
+                                    <span className={`link ${styles.menuLink}`}>{menu.back}</span>
                                 </Link>
                             </nav>
                         </div>
@@ -89,14 +91,14 @@ export default function ToolsLayout({ children }: { children: React.ReactNode })
                             {hash && toolStatus.hasResult && (
                                 <HeaderSearchBar
                                     tool={tool}
-                                    placeholder="Type a new website to check"
+                                    placeholder={texts.app.headerPlaceholder}
                                     errorText={toolStatus.failed ? headerErrors[tool] : undefined}
                                 />
                             )}
                         </header>
                         <div className={styles.page}>{children}</div>
                         <footer className={styles.footer}>
-                            <p className={styles.footerText}>© 2023 ScamScan. All Rights Reserved.</p>
+                            <p className={styles.footerText}>{texts.site.copyright(new Date().getFullYear())}. {texts.footer.rightsReserved}</p>
                             <ul className={styles.footerLinks}>
                                 {footerLinks.map(({ label, href }) => (
                                     <li className={styles.footerLinkItem} key={href}>

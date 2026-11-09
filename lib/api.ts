@@ -1,14 +1,14 @@
 import createClient from 'openapi-fetch';
-import { ipWhoisMock } from './mocks';
+import { ipWhoisMock, nodesMock, tldsMock } from './mocks';
 import type { paths } from './schema';
-import type { DomainWhois, IpWhois, ReportPayload, ScamCheckResult } from './types';
+import type { DomainWhois, IpWhois, ScrapingNode, TldList } from './types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.scamscan.net';
 const WHOIS_URL = process.env.NEXT_PUBLIC_WHOIS_URL || 'https://whois.backend.scamscan.net';
 
-async function request(url: string, init?: RequestInit, expectedStatus = 200) {
-    const response = await fetch(url, init);
-    if (response.status !== expectedStatus) {
+async function request(url: string) {
+    const response = await fetch(url);
+    if (!response.ok) {
         throw new Error(`Request to ${url} failed with status ${response.status}`);
     }
 
@@ -26,41 +26,17 @@ async function call<T>(promise: Promise<{ data?: T, response: Response }>) {
     return data as T;
 }
 
-const json = (url: string, init?: RequestInit, expectedStatus?: number) => request(url, init, expectedStatus).then((response) => response.json());
+const simulate = <T>(value: T): Promise<T> => new Promise((resolve) => {
+    setTimeout(() => resolve(value), 300);
+});
 
-const image = (url: string) => request(url).then(async (response) => URL.createObjectURL(await response.blob()));
+export const getVerdict = (url: string) => call(client.GET('/verdicts', { params: { query: { url } } })).then((data) => data.verdict);
 
-const toPercent = (data: { scamScore: number }) => Number(data.scamScore.toFixed(3));
+export const getReport = (domain: string) => call(client.GET('/report/{url}', { params: { path: { url: domain } } }));
 
-export async function getScamCheck(url: string): Promise<ScamCheckResult> {
-    const { domain, code, whois, server } = await json(`${API_URL}/registry?url=${url}`);
-    const lastUpdate: string | undefined = whois?.json_format?.['>>> Last update of WHOIS database'];
+export const sendReport = (domain: string) => call(client.POST('/report', { body: { domain } }));
 
-    return {
-        domain: `${domain?.subdomain && domain.subdomain + '.'}${domain?.domain && domain.domain + '.'}${domain?.tld}`,
-        name: code?.title || '-',
-        websiteText: code?.text || '-',
-        lastUpdate: lastUpdate ? lastUpdate.split('<<<')[0].trim() : null,
-        registrar: whois?.parsed?.registrar?.name || '-',
-        registrationDate: whois?.parsed?.date?.registration_date || '-',
-        ownerName: server?.whois?.json_format?.NetName || '-',
-        ip: server?.ip || '-',
-        country: server?.whois?.json_format?.Country || '-',
-        registrant: server?.whois?.json_format?.OrgName || '-',
-    };
-}
-
-export const getListStatus = (url: string) => call(client.GET('/lists', { params: { query: { url } } })).then((data) => data.status);
-
-export const getScreenshot = (url: string) => image(`${API_URL}/registry/image?url=${url}`);
-
-export const getFullSizeScreenshot = (url: string) => image(`${API_URL}/registry/image?url=${url}&full_size=true`);
-
-export const getDomainScore = (url: string): Promise<number> => json(`${API_URL}/ai/classify/domain?url=${url}`).then(toPercent);
-
-export const getWebsiteScore = (url: string): Promise<number> => json(`${API_URL}/ai/classify/website?url=${url}`, { method: 'POST' }, 201).then(toPercent);
-
-export const getWhoisDomain = (domain: string): Promise<DomainWhois> => json(`${WHOIS_URL}/v1/whois/${domain}`);
+export const getWhoisDomain = (domain: string): Promise<DomainWhois> => request(`${WHOIS_URL}/v1/whois/${domain}`).then((response) => response.json());
 
 /** The original upstream payload: RDAP JSON (pretty-printed) or plain WHOIS text. */
 export async function getWhoisDomainRaw(domain: string) {
@@ -72,23 +48,38 @@ export async function getWhoisDomainRaw(domain: string) {
     }
 }
 
-// Simulated endpoint: the whois API only supports domains, so IP lookups return static data.
-export const getWhoisIp = (ip: string): Promise<IpWhois> => new Promise((resolve) => {
-    setTimeout(() => resolve({ ...ipWhoisMock, ip }), 300);
-});
+// Simulated endpoints below: the API has no IP whois, domain zone or node management (yet), so they use lib/mocks.ts.
 
-export const getTlds = (page: number, perPage: number, q: string) => call(client.GET('/kdb/tlds/list', { params: { query: { page, per_page: perPage, q } } }));
+export const getWhoisIp = (ip: string): Promise<IpWhois> => simulate({ ...ipWhoisMock, ip });
 
-export const tldDownloadUrl = (tld: string) => `${API_URL}/kdb/tlds/download?tld=${tld}`;
+export const getTlds = (page: number, perPage: number, q: string): Promise<TldList> => {
+    const tlds = tldsMock.filter((item) => item.tld.includes(q.trim().toLowerCase()));
 
-export const sendReport = (payload: ReportPayload) => call(client.POST('/report', { body: payload }));
+    return simulate({
+        tlds: tlds.slice((page - 1) * perPage, page * perPage),
+        pagination: { current_page: page, per_page: perPage, last_page: Math.max(1, Math.ceil(tlds.length / perPage)) },
+    });
+};
+
+export const tldDownloadUrl = (tld: string) => `data:text/csv;charset=utf-8,domain%0Aexample.${tld}%0A`;
+
+let nodes = nodesMock;
+
+export const getNodes = (): Promise<ScrapingNode[]> => simulate(nodes);
+
+export const createNode = () => {
+    const node_id = crypto.randomUUID();
+    nodes = [...nodes, { name: `node-${nodes.length + 1}`, node_id, last_seen: new Date().toISOString(), completed_jobs: 0, failed_jobs: 0 }];
+
+    return simulate(crypto.randomUUID().replaceAll('-', ''));
+};
+
+export const deleteNode = (nodeId: string) => {
+    nodes = nodes.filter((node) => node.node_id !== nodeId);
+
+    return simulate(null);
+};
 
 export const login = (email: string, password: string) => call(client.POST('/user/login', { body: { email, password }, credentials: 'include' }));
 
 export const getMe = () => call(client.GET('/user/me', { credentials: 'include' }));
-
-export const getNodes = () => call(client.GET('/dispatcher/node/list', { credentials: 'include' }));
-
-export const createNode = () => call(client.POST('/dispatcher/node/create', { credentials: 'include' })).then((data) => data.secret);
-
-export const deleteNode = (nodeId: string) => call(client.DELETE('/dispatcher/node/delete/{node_id}', { params: { path: { node_id: nodeId } }, credentials: 'include' }));

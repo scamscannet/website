@@ -6,17 +6,13 @@ import { Button } from './ui';
 import { CloseIcon, SuccessIcon, WarningIcon } from './icons';
 import { sendReport } from '@/lib/api';
 import { emailRegex, urlRegex } from '@/lib/validation';
+import { texts } from '@/lib/texts';
 import styles from './ReportModal.module.css';
 
 type Step = 'details' | 'contact' | 'done';
 type Field = 'url' | 'description' | 'email';
 
-const TEXTS = {
-    details: ['Report a Scam', 'Help keep the web safe by reporting scams. Share the details below, and let\'s work together for a secure online space!'],
-    contact: ['Report a Scam', 'Would you like to receive updates on the resolution of this report?'],
-    done: ['Report Submitted', 'Your report has been successfully submitted. Thank you for taking the initiative to make the web safer!'],
-    failed: ['Report Not Submitted', 'Your report hasn\'t been successfully submitted'],
-};
+const t = texts.report;
 
 export const ReportModal = ({ onClose }: { onClose: () => void }) => {
     const [step, setStep] = useState<Step>('details');
@@ -55,14 +51,8 @@ export const ReportModal = ({ onClose }: { onClose: () => void }) => {
             return;
         }
         try {
-            await sendReport({
-                url,
-                comment: description,
-                email: wantsUpdates ? email : '',
-                source: '',
-                contact_allowed: contactAllowed,
-                tags: null,
-            });
+            // The API only takes the domain for now; description and contact details are not sent.
+            await sendReport(url);
         } catch {
             setFailed(true);
         }
@@ -83,37 +73,37 @@ export const ReportModal = ({ onClose }: { onClose: () => void }) => {
         return () => clearTimeout(timer);
     }, [step, onClose]);
 
-    const [title, text] = failed ? TEXTS.failed : TEXTS[step];
+    const { title, text } = failed ? t.failed : t[step];
 
     return createPortal(
         <div className={styles.overlay} onClick={(event) => event.target === event.currentTarget && onClose()}>
             <div className={styles.formWrapper}>
-                <button type="button" className={styles.closeButton} onClick={onClose}>
+                <button type="button" className={styles.closeButton} onClick={onClose} aria-label={t.close}>
                     <CloseIcon />
                 </button>
                 <form className={styles.form} onSubmit={submit}>
                     {step === 'done' && !failed ? <SuccessIcon /> : <WarningIcon />}
-                    <h3 className={styles.title}>{title}</h3>
+                    <h2 className={styles.title}>{title}</h2>
                     <p className={styles.text}>{text}</p>
                     {step !== 'done' && <div className={styles.divider} />}
 
                     <div className={`${styles.step} ${step === 'details' ? styles.activeStep : ''}`}>
                         <div className={styles.inputsContainer}>
                             <label className={styles.inputWrapper}>
-                                <span className={styles.label}>Scam URL or domain</span>
+                                <span className={styles.label}>{t.urlLabel}</span>
                                 <input
                                     className={`${styles.input} ${invalid.url ? styles.invalid : ''}`}
-                                    placeholder="www.example-scam.com"
+                                    placeholder={t.urlPlaceholder}
                                     value={url}
                                     onChange={(event) => setUrl(event.target.value)}
                                     onBlur={() => validate('url')}
                                 />
                             </label>
                             <label className={styles.inputWrapper}>
-                                <span className={styles.label}>Scam description</span>
+                                <span className={styles.label}>{t.descriptionLabel}</span>
                                 <textarea
                                     className={`${styles.input} ${styles.textArea} ${invalid.description ? styles.invalid : ''}`}
-                                    placeholder="Provide details such as the nature of the scam, suspicious activities, or any relevant information that can help us understand and address the issue"
+                                    placeholder={t.descriptionPlaceholder}
                                     value={description}
                                     onChange={(event) => setDescription(event.target.value)}
                                     onBlur={() => validate('description')}
@@ -121,7 +111,7 @@ export const ReportModal = ({ onClose }: { onClose: () => void }) => {
                             </label>
                         </div>
                         <Button type="button" className={styles.button} onClick={() => validate('url', 'description') && setStep('contact')}>
-                            Continue
+                            {t.continue}
                         </Button>
                     </div>
 
@@ -129,20 +119,20 @@ export const ReportModal = ({ onClose }: { onClose: () => void }) => {
                         <div className={styles.radioButtons}>
                             <label className={styles.radioButtonWrapper}>
                                 <input className={styles.radioButton} type="radio" checked={wantsUpdates} onChange={() => chooseUpdates(true)} />
-                                <span className={styles.radioButtonText}>Yes, I'd like to receive updates</span>
+                                <span className={styles.radioButtonText}>{t.wantsUpdates}</span>
                             </label>
                             <label className={styles.radioButtonWrapper}>
                                 <input className={styles.radioButton} type="radio" checked={!wantsUpdates} onChange={() => chooseUpdates(false)} />
-                                <span className={styles.radioButtonText}>Stay anonymous</span>
+                                <span className={styles.radioButtonText}>{t.anonymous}</span>
                             </label>
                             {wantsUpdates && (
                                 <>
                                     <div className={styles.divider} />
                                     <label className={styles.inputWrapper}>
-                                        <span className={styles.label}>Share your email for updates</span>
+                                        <span className={styles.label}>{t.emailLabel}</span>
                                         <input
                                             className={`${styles.input} ${invalid.email ? styles.invalid : ''}`}
-                                            placeholder="your.email@example.com"
+                                            placeholder={t.emailPlaceholder}
                                             value={email}
                                             onChange={(event) => setEmail(event.target.value)}
                                             onBlur={() => validate('email')}
@@ -159,17 +149,14 @@ export const ReportModal = ({ onClose }: { onClose: () => void }) => {
                                     checked={contactAllowed}
                                     onChange={(event) => setContactAllowed(event.target.checked)}
                                 />
-                                <span className={styles.checkboxText}>
-                                    I agree to be contacted if there are questions
-                                    or additional information is needed regarding my report.
-                                </span>
+                                <span className={styles.checkboxText}>{t.contactAllowed}</span>
                             </label>
                         )}
-                        <Button className={styles.button}>Submit a Report</Button>
+                        <Button className={styles.button}>{t.submit}</Button>
                     </div>
 
                     {step === 'done' && (
-                        <Button type="button" className={styles.button} onClick={onClose}>Close</Button>
+                        <Button type="button" className={styles.button} onClick={onClose}>{t.close}</Button>
                     )}
                 </form>
             </div>

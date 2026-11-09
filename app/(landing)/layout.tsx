@@ -8,7 +8,10 @@ import { HeaderSearchBar } from '@/components/SearchBar';
 import { ReportModal } from '@/components/ReportModal';
 import { LinkedInIcon, MenuIcon, TelegramIcon, XTwitterIcon } from '@/components/icons';
 import { isMobileWidth, ReportModalContext, scrollToSection, useBodyScrollLock } from '@/lib/hooks';
+import { texts } from '@/lib/texts';
 import styles from './layout.module.css';
+
+const { nav, footer } = texts;
 
 const Header = ({ openReportModal }: { openReportModal: () => void }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -53,23 +56,23 @@ const Header = ({ openReportModal }: { openReportModal: () => void }) => {
             <ul className={`${styles.headerContent} ${isOpen ? styles.open : ''}`}>
                 <li className={styles.column}>
                     <Link href="/" className={`link ${styles.logoLink}`} onClick={closeMenu}>
-                        <img src="/images/logo.png" alt="ScamScan" width={72} height={48} />
+                        <img src="/images/logo.png" alt={texts.site.name} width={72} height={48} />
                     </Link>
                 </li>
                 <li className={`${styles.column} ${styles.searchColumn}`}>
-                    <HeaderSearchBar tool="/app/scam-check" />
+                    <HeaderSearchBar tool="/app/check" />
                 </li>
                 <li className={styles.column}>
                     <div className={styles.links}>
                         <nav className={styles.links}>
-                            {navLink('/about-us', 'About Us')}
-                            <span className={styles.anchorLink} onClick={goToTools}>Tools</span>
-                            {navLink('/blog', 'Blog')}
-                            <span className={styles.anchorLink} onClick={goToContacts}>Contacts</span>
+                            {navLink('/about-us', nav.about)}
+                            <a href="/#tools" className={styles.anchorLink} onClick={(event) => { event.preventDefault(); goToTools(); }}>{nav.tools}</a>
+                            {navLink('/blog', nav.blog)}
+                            <a href="#contacts" className={styles.anchorLink} onClick={(event) => { event.preventDefault(); goToContacts(); }}>{nav.contact}</a>
                         </nav>
-                        <Button variant="outlined" className={styles.reportButton} onClick={openReportModal}>Report a Scam</Button>
-                        <Link href="/app/scam-check" className={`link ${styles.openAppLink}`}>
-                            <Button>Open App</Button>
+                        <Button type="button" variant="outlined" className={styles.reportButton} onClick={openReportModal}>{nav.report}</Button>
+                        <Link href="/app/check" className={`link ${styles.openAppLink}`}>
+                            <Button type="button">{nav.openApp}</Button>
                         </Link>
                     </div>
                 </li>
@@ -82,18 +85,18 @@ const Header = ({ openReportModal }: { openReportModal: () => void }) => {
 const Footer = () => (
     <footer id="contacts" className={styles.footer}>
         <ul className={styles.footerContent}>
-            <img src="/images/logo-footer.png" alt="ScamScan" width={102} height={68} />
+            <img src="/images/logo-footer.png" alt={texts.site.name} width={102} height={68} />
             <li className={styles.footerColumn}>
-                <a href="mailto:email_example@gmail.com" className={`link ${styles.emailLink}`}>email_example@gmail.com</a>
-                <p className={styles.footerText}>Im Staderfeld 63a, Neu Eliah, BW 96929</p>
+                <a href={`mailto:${texts.site.email}`} className={`link ${styles.emailLink}`}>{texts.site.email}</a>
+                <address className={styles.footerText}>{texts.site.address}</address>
                 <p className={styles.footerText}>
-                    Schedule a virtual meeting:
-                    <a href="#" className={`link ${styles.underlined}`}>Book a Meeting</a>
+                    {footer.meeting}
+                    <a href="#" className={`link ${styles.underlined}`}>{footer.bookMeeting}</a>
                 </p>
             </li>
             <li className={styles.footerColumn}>
-                <a href="#" className="link">Privacy Policy</a>
-                <a href="#" className="link">Terms &amp; Conditions</a>
+                <a href="#" className="link">{footer.privacy}</a>
+                <a href="#" className="link">{footer.terms}</a>
                 <div className={styles.socialLinks}>
                     <a href="https://www.linkedin.com/in/felixpf/" className="link"><LinkedInIcon /></a>
                     {/*
@@ -104,7 +107,7 @@ const Footer = () => (
             </li>
         </ul>
         <div className={styles.divider} />
-        <p className={styles.copyright}>© 2023 ScamScan</p>
+        <p className={styles.copyright}>{texts.site.copyright(new Date().getFullYear())}</p>
     </footer>
 );
 

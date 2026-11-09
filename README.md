@@ -1,6 +1,6 @@
 # ScamScan
 
-Website and tools (scam check, whois query, domain zones) for scamscan.net, built with Next.js as a static export.
+Website and tools (website check, whois query, domain zones) for scamscan.net, built with Next.js as a static export.
 
 ## Development
 
@@ -19,15 +19,17 @@ API endpoints are configured via `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_WHOIS_UR
 
 ```
 app/(landing)/   marketing pages: home, blog, about us (shared header + footer layout)
-app/app/         tool pages under /app: scam check, takedown tracker, tools (shared sidebar layout)
+app/app/         tool pages under /app: website check, takedown tracker, tools (shared sidebar layout)
 components/      shared UI; icons.tsx holds all icons
 lib/             api.ts (requests), types.ts, hooks.ts, validation.ts, blog.ts and mocks.ts (placeholder data)
 docs/            corporate identity
 ```
 
-Tool pages take their input from the URL hash, e.g. `/app/scam-check#example.com`.
+Tool pages take their input from the URL hash, e.g. `/app/check#example.com`.
 
-Domain whois uses [who-dat](https://whois.backend.scamscan.net/docs). It has no IP support, so IP lookups return static data from `lib/mocks.ts` (see `getWhoisIp` in `lib/api.ts`).
+The API has no IP whois, domain zone or node endpoints, so `lib/api.ts` simulates them with `lib/mocks.ts`. Run `npm run api` after API changes to regenerate `lib/schema.d.ts`.
+
+Domain whois uses [who-dat](https://whois.backend.scamscan.net/docs).
 
 ## Deploy
 

@@ -94,19 +94,6 @@
     gap: 16px;
 }
 
-.deleteButton {
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: var(--error);
-    font-family: var(--font-regular);
-    font-size: 14px;
-    cursor: pointer;
-}
-.deleteButton:hover {
-    text-decoration: underline;
-}
-
 .code {
     font-family: monospace;
     word-break: break-all;

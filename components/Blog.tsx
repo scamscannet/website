@@ -4,10 +4,13 @@ import { useEffect, useState, type MouseEvent } from 'react';
 import Link from 'next/link';
 import { BlogCard } from './BlogCard';
 import { Button, SectionSubtitle, SectionTitle } from './ui';
-import { blogCards, featuredArticles, slugify } from '@/lib/blog';
+import { articles, formatArticleDate, slugify } from '@/lib/blog';
 import { scrollToSection, useHash } from '@/lib/hooks';
+import { texts } from '@/lib/texts';
 import type { Article } from '@/lib/types';
 import styles from './Blog.module.css';
+
+const t = texts.blog;
 
 export const FeaturedArticles = () => {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -15,26 +18,21 @@ export const FeaturedArticles = () => {
     return (
         <section className={styles.featured}>
             <div className={styles.featuredText}>
-                <SectionTitle className={styles.featuredTitle}>
-                    Explore Our Featured Insights on Online Safety
-                </SectionTitle>
-                <SectionSubtitle>
-                    Dive into our curated selection of articles focusing on online safety and scam awareness.
-                    Stay informed, stay secure.
-                </SectionSubtitle>
+                <SectionTitle as="h1" className={styles.featuredTitle}>{t.title}</SectionTitle>
+                <SectionSubtitle>{t.subtitle}</SectionSubtitle>
             </div>
             <div className={styles.featuredCards}>
-                {featuredArticles.map((article, index) => (
+                {articles.map((article, index) => (
                     <div
                         key={article.id}
                         className={`${styles.featuredCard} ${index === activeIndex ? styles.active : ''}`}
                         onMouseEnter={() => setActiveIndex(index)}
                     >
-                        <img src={article.image} alt="" />
+                        <img src={article.image} alt={article.title} />
                         <div className={styles.featuredDescription}>
-                            <p className={styles.featuredLabel}>{article.label}</p>
+                            <p className={styles.featuredLabel}>{article.title}</p>
                             <Link href={`/blog/${article.id}`} className="link">
-                                <Button>Read More</Button>
+                                <Button type="button">{t.readArticle}</Button>
                             </Link>
                         </div>
                     </div>
@@ -46,7 +44,7 @@ export const FeaturedArticles = () => {
 
 export const ArticleView = ({ article }: { article: Article }) => {
     const hash = useHash();
-    const anchors = [...article.sections.map((section) => section.title), 'Conclusion'];
+    const anchors = [...article.sections.map((section) => section.title), t.conclusion];
 
     useEffect(() => {
         if (hash && window.innerWidth >= 960) {
@@ -61,19 +59,19 @@ export const ArticleView = ({ article }: { article: Article }) => {
     };
 
     return (
-        <section className={styles.article}>
+        <article className={styles.article}>
             <ul className={styles.breadcrumbs}>
-                <li><Link href="/" className={`link ${styles.breadcrumbLink}`}>ScamScan</Link></li>
+                <li><Link href="/" className={`link ${styles.breadcrumbLink}`}>{texts.site.name}</Link></li>
                 <span className={styles.dot} />
-                <li><Link href="/blog" className={`link ${styles.breadcrumbLink}`}>Blog</Link></li>
+                <li><Link href="/blog" className={`link ${styles.breadcrumbLink}`}>{t.breadcrumbBlog}</Link></li>
                 <span className={styles.dot} />
                 <li>{article.title}</li>
             </ul>
-            <SectionTitle className={styles.articleTitle}>{article.title}</SectionTitle>
+            <SectionTitle as="h1" className={styles.articleTitle}>{article.title}</SectionTitle>
             <div className={styles.articleBody}>
                 <div className={styles.articleContent}>
                     <div className={styles.articleImage}>
-                        <img src={article.image} alt="" />
+                        <img src={article.image} alt={article.title} />
                     </div>
                     <SectionSubtitle className={styles.articleText}>{article.subtitle}</SectionSubtitle>
                     {article.sections.map((section) => (
@@ -83,29 +81,29 @@ export const ArticleView = ({ article }: { article: Article }) => {
                                 {section.points.map((point) => (
                                     <li className={styles.point} key={point.heading}>
                                         <SectionSubtitle className={styles.articleText}>
-                                            <span style={{ fontWeight: 'bold' }}>{point.heading}</span>{point.text}
+                                            <strong>{point.heading}:</strong> {point.text}
                                         </SectionSubtitle>
                                     </li>
                                 ))}
                             </ul>
                         </div>
                     ))}
-                    <div id="conclusion">
-                        <SectionTitle className={styles.articleTitle}>Conclusion</SectionTitle>
+                    <div id={slugify(t.conclusion)}>
+                        <SectionTitle className={styles.articleTitle}>{t.conclusion}</SectionTitle>
                     </div>
                     <SectionSubtitle className={styles.articleText}>{article.conclusion}</SectionSubtitle>
                 </div>
                 <aside className={styles.tableOfContents}>
                     <div>
-                        <SectionSubtitle className={styles.articleText}>{article.date}</SectionSubtitle>
+                        <time dateTime={article.date} className={`section-subtitle ${styles.articleText}`} style={{ display: 'block' }}>{formatArticleDate(article.date)}</time>
                         <div className={styles.hashtags}>
                             {article.hashtags.map((hashtag) => (
                                 <SectionSubtitle className={styles.articleText} key={hashtag}>{hashtag}</SectionSubtitle>
                             ))}
                         </div>
                     </div>
-                    <h3 className={styles.tableOfContentsTitle}>Table of Contents</h3>
-                    <div className={styles.anchors}>
+                    <h2 className={styles.tableOfContentsTitle}>{t.contents}</h2>
+                    <nav className={styles.anchors}>
                         {anchors.map((anchor) => {
                             const slug = slugify(anchor);
 
@@ -120,19 +118,19 @@ export const ArticleView = ({ article }: { article: Article }) => {
                                 </a>
                             );
                         })}
-                    </div>
+                    </nav>
                 </aside>
             </div>
-        </section>
+        </article>
     );
 };
 
 export const RecentPosts = () => (
     <section className={styles.recent}>
-        <h3 className={styles.recentTitle}>Recent blog posts</h3>
+        <h2 className={styles.recentTitle}>{t.recentTitle}</h2>
         <div className={styles.recentCards}>
-            {blogCards.map((card, index) => <BlogCard card={card} key={index} />)}
+            {t.cards.map((card, index) => <BlogCard card={card} key={index} />)}
         </div>
-        <Button className={styles.loadMore}>Load More</Button>
+        <Button type="button" className={styles.loadMore}>{t.loadMore}</Button>
     </section>
 );

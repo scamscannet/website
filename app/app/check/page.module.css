@@ -1,0 +1,101 @@
+.result {
+    gap: 32px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.domain {
+    font-family: var(--font-bold);
+    color: var(--text-black);
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 32px;
+    overflow-wrap: anywhere;
+}
+
+.url {
+    margin-top: 8px;
+    font-family: var(--font-regular);
+    color: var(--grey-info);
+    font-size: 12px;
+    line-height: 14px;
+    overflow-wrap: anywhere;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #F5F5F5;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(101, 101, 101, 0.03);
+    background: #fff;
+}
+
+.cardHead {
+    padding: 12px 24px;
+    border-bottom: 1px solid #F5F5F5;
+    background: #F9FAFB;
+    color: var(--text-grey);
+    font-family: var(--font-semibold);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 17px;
+}
+
+.cardBody {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    flex: 1;
+}
+
+.text {
+    color: var(--text-grey);
+    font-family: var(--font-regular);
+    font-size: 14px;
+    line-height: 17px;
+}
+
+.rows {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 12px 24px;
+    font-family: var(--font-regular);
+    color: var(--text-grey);
+    font-size: 14px;
+    line-height: 17px;
+}
+.rows dt {
+    font-family: var(--font-semibold);
+    font-weight: 600;
+}
+
+.reportButton {
+    margin-top: auto;
+    align-self: flex-start;
+}
+
+.placeholder {
+    padding: 32px 24px;
+    border: 1px dashed var(--grey-light);
+    border-radius: 4px;
+    text-align: center;
+    color: var(--grey-info);
+    font-family: var(--font-regular);
+    font-size: 14px;
+    line-height: 17px;
+}
+
+@media (max-width: 960px) {
+    .cards {
+        grid-template-columns: 1fr;
+    }
+}

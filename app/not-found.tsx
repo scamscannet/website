@@ -1,12 +1,14 @@
-'use client';
+import LandingLayout from './(landing)/layout';
+import { ErrorView } from '@/components/ui';
+import { noIndex } from '@/lib/seo';
+import { texts } from '@/lib/texts';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+export const metadata = noIndex(texts.meta.notFound);
 
 export default function NotFound() {
-    const router = useRouter();
-
-    useEffect(() => router.replace('/'), [router]);
-
-    return null;
+    return (
+        <LandingLayout>
+            <ErrorView notFound />
+        </LandingLayout>
+    );
 }

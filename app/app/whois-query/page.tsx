@@ -8,6 +8,7 @@ import { WhoisResult } from '@/components/WhoisResult';
 import { getWhoisDomain, getWhoisIp } from '@/lib/api';
 import { useGoToTool, useHash, useReportToolStatus } from '@/lib/hooks';
 import { domainRegex, ipv4Regex } from '@/lib/validation';
+import { texts } from '@/lib/texts';
 import type { WhoisLookup } from '@/lib/types';
 import tools from '../tools.module.css';
 
@@ -57,14 +58,11 @@ export default function WhoisQueryPage() {
             {hash && whois ? <WhoisResult lookup={whois} /> : (
                 <>
                     <div className={tools.intro}>
-                        <SectionTitle className={tools.title}>Whois Query</SectionTitle>
-                        <SectionSubtitle className={tools.subtitle}>
-                            Search for detailed information about IP addresses and domains,
-                            including registration information, ownership, and more
-                        </SectionSubtitle>
+                        <SectionTitle as="h1" className={tools.title}>{texts.whois.title}</SectionTitle>
+                        <SectionSubtitle className={tools.subtitle}>{texts.whois.subtitle}</SectionSubtitle>
                     </div>
-                    <SearchBar whois placeholder="Enter a domain or IP address" onSubmit={(value) => goToTool('/app/whois-query', value)} />
-                    {failed && <SectionSubtitle className={tools.errorMessage}>No data available for {hash}.</SectionSubtitle>}
+                    <SearchBar whois placeholder={texts.whois.placeholder} onSubmit={(value) => goToTool('/app/whois-query', value)} />
+                    {failed && <SectionSubtitle className={tools.errorMessage}>{texts.whois.noData(hash)}</SectionSubtitle>}
                 </>
             )}
         </section>

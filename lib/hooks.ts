@@ -7,7 +7,7 @@ import type { ToolStatus } from './types';
 const HASH_EVENT = 'scamscan:hashchange';
 
 // Next.js navigates with history.pushState, which fires no hashchange event,
-// so clicking e.g. the sidebar link from /scam-check#site.com to /scam-check would go unnoticed.
+// so clicking e.g. the sidebar link from /app/check#site.com to /app/check would go unnoticed.
 if (typeof window !== 'undefined' && !('hashPatched' in window.history)) {
     for (const method of ['pushState', 'replaceState'] as const) {
         const original = window.history[method].bind(window.history);
@@ -29,7 +29,7 @@ const subscribeToHash = (onChange: () => void) => {
     };
 };
 
-/** The URL hash without "#", e.g. "example.com" for /scam-check#example.com */
+/** The URL hash without "#", e.g. "example.com" for /app/check#example.com */
 export const useHash = () => useSyncExternalStore(
     subscribeToHash,
     () => decodeURIComponent(window.location.hash.slice(1)).trim(),

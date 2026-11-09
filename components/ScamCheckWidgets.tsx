@@ -9,8 +9,11 @@ import 'yet-another-react-lightbox/styles.css';
 import { Button, SectionSubtitle } from './ui';
 import { LinkIcon, ScamStatusSafeIcon, ScamStatusScamIcon, ScamStatusUnclassifiedIcon, WarningIcon } from './icons';
 import { useBodyScrollLock } from '@/lib/hooks';
+import { texts } from '@/lib/texts';
 import type { ScamStatus } from '@/lib/types';
 import styles from './ScamCheckWidgets.module.css';
+
+const t = texts.check;
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -40,7 +43,7 @@ const riskOf = (score: number) => {
 };
 
 export const ScoreChart = ({ score, isLoading, label }: { score: number | null, isLoading: boolean, label: string }) => {
-    let chart = <div className={styles.noData}><p className={styles.chartLabel}>No Data</p></div>;
+    let chart = <div className={styles.noData}><p className={styles.chartLabel}>{t.score.noData}</p></div>;
 
     if (isLoading) {
         chart = <div className={styles.skeleton} />;
@@ -88,12 +91,13 @@ export const ScoreChart = ({ score, isLoading, label }: { score: number | null, 
 };
 
 type ScreenshotsProps = {
+    domain: string
     screenshot: string | null
     fullSizeScreenshot: string | null
     websiteText: string | null
 };
 
-export const Screenshots = ({ screenshot, fullSizeScreenshot, websiteText }: ScreenshotsProps) => {
+export const Screenshots = ({ domain, screenshot, fullSizeScreenshot, websiteText }: ScreenshotsProps) => {
     const [isLightboxOpen, setIsLightboxOpen] = useState(false);
     const [isTextOpen, setIsTextOpen] = useState(false);
     const hasText = websiteText && websiteText !== '-';
@@ -102,28 +106,28 @@ export const Screenshots = ({ screenshot, fullSizeScreenshot, websiteText }: Scr
 
     return (
         <div className={styles.screenshots}>
-            <div className={styles.screenshotsHead}>Screenshots</div>
+            <div className={styles.screenshotsHead}>{t.screenshots.title}</div>
             <div className={styles.screenshotsDescription}>
-                {screenshot && 'Explore visual snapshots to preview the appearance of the website. Click on an image to open the full-size version.'}
+                {screenshot && t.screenshots.description}
                 {hasText && (
                     <div className={styles.textLink} onClick={() => setIsTextOpen(true)}>
-                        <LinkIcon /> View website text
+                        <LinkIcon /> {t.screenshots.viewText}
                     </div>
                 )}
             </div>
             {screenshot ? (
                 <div className={styles.screenshot}>
-                    <img src={screenshot} alt="Website screenshot" onClick={() => setIsLightboxOpen(true)} />
+                    <img src={screenshot} alt={t.screenshots.alt(domain)} onClick={() => setIsLightboxOpen(true)} />
                     <div className={styles.screenshotOverlay}>
-                        <Button variant="outlined" className={styles.fullSizeButton} onClick={() => setIsLightboxOpen(true)}>
-                            Open full-size image
+                        <Button type="button" variant="outlined" className={styles.fullSizeButton} onClick={() => setIsLightboxOpen(true)}>
+                            {t.screenshots.openFullSize}
                         </Button>
                     </div>
                 </div>
             ) : (
                 <div className={styles.noImage}>
                     <WarningIcon size={130} />
-                    <SectionSubtitle className={styles.noImageText}>No image</SectionSubtitle>
+                    <SectionSubtitle className={styles.noImageText}>{t.screenshots.noImage}</SectionSubtitle>
                 </div>
             )}
             {fullSizeScreenshot && (

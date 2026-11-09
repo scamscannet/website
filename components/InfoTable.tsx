@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { ChevronIcon, LinkIcon } from './icons';
+import { texts } from '@/lib/texts';
 import styles from './InfoTable.module.css';
 
 const LocationMap = dynamic(() => import('./LocationMap'), { ssr: false });
@@ -51,7 +52,7 @@ export const InfoTable = ({ title, rows, collapsible = false, defaultOpen = true
                             <tr>
                                 <th>
                                     <Link href={detailsLink} className={styles.detailsLink}>
-                                        <LinkIcon /> {title} details
+                                        <LinkIcon /> {texts.check.whois.details(title)}
                                     </Link>
                                 </th>
                             </tr>

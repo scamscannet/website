@@ -5,7 +5,11 @@ import { InfoTable } from './InfoTable';
 import { AngleBracketsIcon, LocationIcon, TableIcon } from './icons';
 import { getWhoisDomainRaw } from '@/lib/api';
 import type { DomainWhois, IpWhois, WhoisContact, WhoisLookup } from '@/lib/types';
+import { texts } from '@/lib/texts';
 import styles from './WhoisResult.module.css';
+
+const t = texts.whois;
+const { tables, rows } = t;
 
 const LINK_PATTERN = /(\(?https?:\/\/[^\s)"]+\)?|[\w.-]+@[\w.-]+\.[a-zA-Z]{2,4})/;
 
@@ -51,10 +55,10 @@ const RawText = ({ text }: { text: string }) => (
 );
 
 const DomainRawText = ({ domain }: { domain: string }) => {
-    const [text, setText] = useState('Loading...');
+    const [text, setText] = useState(t.loading);
 
     useEffect(() => {
-        getWhoisDomainRaw(domain).then(setText).catch(() => setText('No raw data available.'));
+        getWhoisDomainRaw(domain).then(setText).catch(() => setText(t.noRaw));
     }, [domain]);
 
     if (text.startsWith('{')) {
@@ -66,7 +70,7 @@ const DomainRawText = ({ domain }: { domain: string }) => {
 const ResultHeader = ({ title, location, isRaw, setIsRaw }: { title: string, location?: string, isRaw: boolean, setIsRaw: (raw: boolean) => void }) => (
     <div className={styles.header}>
         <div className={styles.headerText}>
-            <h3 className={styles.title}>{title}</h3>
+            <h1 className={styles.title}>{title}</h1>
             {location && (
                 <div className={styles.location}>
                     <div className={styles.locationIcon}><LocationIcon purple /></div>
@@ -76,10 +80,10 @@ const ResultHeader = ({ title, location, isRaw, setIsRaw }: { title: string, loc
         </div>
         <div className={styles.switch}>
             <button className={`${styles.switchButton} ${isRaw ? '' : styles.active}`} onClick={() => setIsRaw(false)}>
-                <TableIcon active={!isRaw} /> Table
+                <TableIcon active={!isRaw} /> {t.table}
             </button>
             <button className={`${styles.switchButton} ${isRaw ? styles.active : ''}`} onClick={() => setIsRaw(true)}>
-                <AngleBracketsIcon active={isRaw} /> Raw
+                <AngleBracketsIcon active={isRaw} /> {t.raw}
             </button>
         </div>
     </div>
@@ -90,15 +94,15 @@ const orDash = (value: unknown) => value || '-';
 const toDay = (date: string | null) => date?.slice(0, 10) || '-';
 
 const contactRows = (contact: WhoisContact) => [
-    { key: 'Name', value: orDash(contact?.name) },
-    { key: 'Organization', value: orDash(contact?.organization) },
-    { key: 'Email', value: orDash(contact?.email) },
-    { key: 'Phone', value: orDash(contact?.phone) },
-    { key: 'Street', value: orDash(contact?.address.street) },
-    { key: 'City', value: orDash(contact?.address.city) },
-    { key: 'State', value: orDash(contact?.address.state) },
-    { key: 'Postal Code', value: orDash(contact?.address.postalCode) },
-    { key: 'Country', value: orDash(contact?.address.country) },
+    { key: rows.name, value: orDash(contact?.name) },
+    { key: rows.organization, value: orDash(contact?.organization) },
+    { key: rows.email, value: orDash(contact?.email) },
+    { key: rows.phone, value: orDash(contact?.phone) },
+    { key: rows.street, value: orDash(contact?.address.street) },
+    { key: rows.city, value: orDash(contact?.address.city) },
+    { key: rows.state, value: orDash(contact?.address.state) },
+    { key: rows.postalCode, value: orDash(contact?.address.postalCode) },
+    { key: rows.country, value: orDash(contact?.address.country) },
 ];
 
 const DomainTables = ({ whois }: { whois: DomainWhois }) => {
@@ -107,28 +111,28 @@ const DomainTables = ({ whois }: { whois: DomainWhois }) => {
 
     return (
         <>
-            <InfoTable collapsible title="Registrar info" rows={[
-                { key: 'Name', value: orDash(registrar.name) },
-                { key: 'IANA id', value: orDash(registrar.ianaId) },
-                { key: 'Registrar URL', value: orDash(registrar.url) },
-                { key: 'Abuse Mail', value: orDash(registrar.abuseEmail) },
-                { key: 'Abuse Phone', value: orDash(registrar.abusePhone?.replace(/^tel:/, '')) },
-                { key: 'Status', value: orDash(whois.status.join(', ')) },
+            <InfoTable collapsible title={tables.registrar} rows={[
+                { key: rows.name, value: orDash(registrar.name) },
+                { key: rows.ianaId, value: orDash(registrar.ianaId) },
+                { key: rows.url, value: orDash(registrar.url) },
+                { key: rows.abuseEmail, value: orDash(registrar.abuseEmail) },
+                { key: rows.abusePhone, value: orDash(registrar.abusePhone?.replace(/^tel:/, '')) },
+                { key: rows.status, value: orDash(whois.status.join(', ')) },
             ]} />
-            <InfoTable collapsible title="Important dates" rows={[
-                { key: 'Expires on', value: toDay(dates.expires) },
-                { key: 'Registered on', value: toDay(dates.created) },
-                { key: 'Updated on', value: toDay(dates.updated) },
+            <InfoTable collapsible title={tables.dates} rows={[
+                { key: rows.expires, value: toDay(dates.expires) },
+                { key: rows.created, value: toDay(dates.created) },
+                { key: rows.updated, value: toDay(dates.updated) },
             ]} />
             <InfoTable
                 collapsible
-                title="Name servers"
+                title={tables.nameServers}
                 rows={nameservers.map((server) => ({ key: server.name, value: orDash([...server.ipv4, ...server.ipv6].join(', ')) }))}
             />
-            <InfoTable collapsible title="Contact Registrant" rows={contactRows(contacts.registrant)} />
-            <InfoTable collapsible defaultOpen={false} title="Contact Admin" rows={contactRows(contacts.admin)} />
-            <InfoTable collapsible defaultOpen={false} title="Contact Billing" rows={contactRows(contacts.billing)} />
-            <InfoTable collapsible defaultOpen={false} title="Contact Tech" rows={contactRows(contacts.tech)} />
+            <InfoTable collapsible title={tables.registrant} rows={contactRows(contacts.registrant)} />
+            <InfoTable collapsible defaultOpen={false} title={tables.admin} rows={contactRows(contacts.admin)} />
+            <InfoTable collapsible defaultOpen={false} title={tables.billing} rows={contactRows(contacts.billing)} />
+            <InfoTable collapsible defaultOpen={false} title={tables.tech} rows={contactRows(contacts.tech)} />
         </>
     );
 };
@@ -140,26 +144,26 @@ const IpTables = ({ whois }: { whois: IpWhois }) => {
         <>
             <InfoTable
                 collapsible
-                title="Geolocation"
+                title={tables.geolocation}
                 location={[location.latitude, location.longitude]}
                 rows={[
-                    { key: 'Country', value: location.country },
-                    { key: 'Address', value: location.address },
-                    { key: 'Longitude', value: location.longitude },
-                    { key: 'Latitude', value: location.latitude },
+                    { key: rows.country, value: location.country },
+                    { key: rows.address, value: location.address },
+                    { key: rows.longitude, value: location.longitude },
+                    { key: rows.latitude, value: location.latitude },
                 ]}
             />
-            <InfoTable collapsible title="Summary" rows={[
-                { key: 'Whois Server', value: whois.whoisServer },
-                { key: 'ASN', value: whois.asn },
-                { key: 'Company', value: whois.organization },
-                { key: 'Route', value: network.cidr },
-                { key: 'Abuse Contact', value: whois.abuseEmail },
+            <InfoTable collapsible title={tables.summary} rows={[
+                { key: rows.whoisServer, value: whois.whoisServer },
+                { key: rows.asn, value: whois.asn },
+                { key: rows.company, value: whois.organization },
+                { key: rows.route, value: network.cidr },
+                { key: rows.abuseContact, value: whois.abuseEmail },
             ]} />
-            <InfoTable collapsible title="IP Net" rows={[
-                { key: 'Net Name', value: network.name },
-                { key: 'First IP', value: network.firstIp },
-                { key: 'Last IP', value: network.lastIp },
+            <InfoTable collapsible title={tables.network} rows={[
+                { key: rows.netName, value: network.name },
+                { key: rows.firstIp, value: network.firstIp },
+                { key: rows.lastIp, value: network.lastIp },
             ]} />
         </>
     );

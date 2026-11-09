@@ -3,8 +3,11 @@
 import { useEffect, useState } from 'react';
 import { Button, Spinner } from '@/components/ui';
 import { createNode, deleteNode, getNodes } from '@/lib/api';
+import { texts } from '@/lib/texts';
 import type { ScrapingNode } from '@/lib/types';
 import styles from '../admin.module.css';
+
+const t = texts.admin.nodes;
 
 const SecretBox = ({ secret, onClose }: { secret: string, onClose: () => void }) => {
     const [copied, setCopied] = useState(false);
@@ -16,14 +19,11 @@ const SecretBox = ({ secret, onClose }: { secret: string, onClose: () => void })
 
     return (
         <div className={styles.secretBox}>
-            <p className={styles.secretText}>
-                Your node was created. This is its secret and it is shown only once.
-                Copy it now, you will not be able to see it again.
-            </p>
+            <p className={styles.secretText}>{t.secret}</p>
             <code className={styles.code}>{secret}</code>
             <div className={styles.secretActions}>
-                <Button type="button" onClick={copy}>{copied ? 'Copied' : 'Copy'}</Button>
-                <Button type="button" variant="outlined" onClick={onClose}>Done</Button>
+                <Button type="button" onClick={copy}>{copied ? t.copied : t.copy}</Button>
+                <Button type="button" variant="outlined" onClick={onClose}>{t.done}</Button>
             </div>
         </div>
     );
@@ -52,27 +52,27 @@ export default function NodesPage() {
 
     const create = () => run(async () => setSecret(await createNode()));
 
-    const remove = (node: ScrapingNode) => confirm(`Delete node ${node.name}?`) && run(() => deleteNode(node.node_id));
+    const remove = (node: ScrapingNode) => confirm(t.confirmDelete(node.name)) && run(() => deleteNode(node.node_id));
 
     return (
         <section className={styles.panel}>
             <div className={styles.panelHeader}>
-                <h3 className={styles.cardTitle}>Scraping Nodes</h3>
-                <Button type="button" onClick={create}>Create</Button>
+                <h1 className={styles.cardTitle}>{t.title}</h1>
+                <Button type="button" onClick={create}>{t.create}</Button>
             </div>
             {secret && <SecretBox secret={secret} onClose={() => setSecret(null)} />}
-            {failed && <p className={styles.error}>Something went wrong, please try again.</p>}
+            {failed && <p className={styles.error}>{t.failed}</p>}
             {!nodes && !failed && <Spinner />}
-            {nodes?.length === 0 && <p className={styles.text}>You have no nodes yet.</p>}
+            {nodes?.length === 0 && <p className={styles.text}>{t.empty}</p>}
             {nodes && nodes.length > 0 && (
                 <table className={styles.table}>
                     <thead>
                         <tr>
-                            <th className={styles.th}>Name</th>
-                            <th className={styles.th}>Node ID</th>
-                            <th className={styles.th}>Last seen</th>
-                            <th className={styles.th}>Completed jobs</th>
-                            <th className={styles.th}>Failed jobs</th>
+                            <th className={styles.th}>{t.columns.name}</th>
+                            <th className={styles.th}>{t.columns.id}</th>
+                            <th className={styles.th}>{t.columns.lastSeen}</th>
+                            <th className={styles.th}>{t.columns.completed}</th>
+                            <th className={styles.th}>{t.columns.failed}</th>
                             <th className={styles.th} />
                         </tr>
                     </thead>
@@ -85,7 +85,7 @@ export default function NodesPage() {
                                 <td className={styles.td}>{node.completed_jobs}</td>
                                 <td className={styles.td}>{node.failed_jobs}</td>
                                 <td className={styles.td}>
-                                    <button type="button" className={styles.deleteButton} onClick={() => remove(node)}>Delete</button>
+                                    <Button type="button" variant="outlined" onClick={() => remove(node)}>{t.delete}</Button>
                                 </td>
                             </tr>
                         ))}

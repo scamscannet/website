@@ -4,7 +4,10 @@ import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui';
 import { login } from '@/lib/api';
+import { texts } from '@/lib/texts';
 import styles from './page.module.css';
+
+const t = texts.login;
 
 export default function LoginPage() {
     const router = useRouter();
@@ -25,18 +28,18 @@ export default function LoginPage() {
     return (
         <main className={styles.page}>
             <form className={styles.form} onSubmit={submit}>
-                <h3 className={styles.title}>Log in</h3>
+                <h1 className={styles.title}>{t.title}</h1>
                 <label className={styles.inputWrapper}>
-                    <span className={styles.label}>Email</span>
+                    <span className={styles.label}>{t.email}</span>
                     <input className={styles.input} type="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
                 </label>
                 <label className={styles.inputWrapper}>
-                    <span className={styles.label}>Password</span>
+                    <span className={styles.label}>{t.password}</span>
                     <input className={styles.input} type="password" required value={password} onChange={(event) => setPassword(event.target.value)} />
                 </label>
-                {failed && <p className={styles.error}>Invalid email or password.</p>}
-                <Button className={styles.button}>Log in</Button>
-                <p className={styles.note}>Account management is not open to the public.</p>
+                {failed && <p className={styles.error}>{t.failed}</p>}
+                <Button className={styles.button}>{t.button}</Button>
+                <p className={styles.note}>{t.note}</p>
             </form>
         </main>
     );

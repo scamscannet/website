@@ -4,9 +4,12 @@ import { useEffect, useState } from 'react';
 import { SectionSubtitle, SectionTitle, Spinner } from '@/components/ui';
 import { ChevronIcon, DownloadIcon, SearchIcon } from '@/components/icons';
 import { getTlds, tldDownloadUrl } from '@/lib/api';
+import { texts } from '@/lib/texts';
 import type { TldList } from '@/lib/types';
 import tools from '../tools.module.css';
 import styles from './page.module.css';
+
+const t = texts.domainZone;
 
 const SEARCH_DELAY_MS = 2000;
 
@@ -70,11 +73,8 @@ export default function DomainZonePage() {
     return (
         <section className={tools.section}>
             <div className={tools.intro}>
-                <SectionTitle className={tools.title}>Domain Zone</SectionTitle>
-                <SectionSubtitle className={tools.subtitle}>
-                    Explore all available domain zones in a searchable list.
-                    Request a CSV download for each zone with comprehensive information.
-                </SectionSubtitle>
+                <SectionTitle as="h1" className={tools.title}>{t.title}</SectionTitle>
+                <SectionSubtitle className={tools.subtitle}>{t.subtitle}</SectionSubtitle>
             </div>
             <div className={`${styles.search} ${isSearchFocused ? styles.searchFocused : ''}`}>
                 <div className={styles.icon}>
@@ -82,7 +82,8 @@ export default function DomainZonePage() {
                 </div>
                 <input
                     className={styles.searchInput}
-                    placeholder="Search for domain zone..."
+                    placeholder={t.placeholder}
+                    aria-label={t.placeholder}
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                     onFocus={() => setIsSearchFocused(true)}
@@ -94,10 +95,10 @@ export default function DomainZonePage() {
                     <table className={styles.table}>
                         <thead className={styles.thead}>
                             <tr className={styles.tr}>
-                                <td className={styles.td}>Domain zone name</td>
-                                <td className={styles.td}>Number of domains</td>
-                                <td className={styles.td}>Registrar</td>
-                                <td className={styles.td}>Last update</td>
+                                <td className={styles.td}>{t.columns.zone}</td>
+                                <td className={styles.td}>{t.columns.count}</td>
+                                <td className={styles.td}>{t.columns.registrar}</td>
+                                <td className={styles.td}>{t.columns.lastUpdate}</td>
                                 <td className={styles.td} />
                             </tr>
                         </thead>
@@ -112,9 +113,9 @@ export default function DomainZonePage() {
                                         {item.tld?.trim() ? (
                                             <a className={styles.download} download href={tldDownloadUrl(item.tld)}>
                                                 <div className={styles.icon}><DownloadIcon color="#6023FA" /></div>
-                                                Download
+                                                {t.download}
                                             </a>
-                                        ) : <span>No data</span>}
+                                        ) : <span>{t.noData}</span>}
                                     </td>
                                 </tr>
                             ))}
@@ -124,10 +125,10 @@ export default function DomainZonePage() {
             </div>
             <div className={styles.pagination}>
                 <div className={styles.rowsPerPage}>
-                    Rows per page:
+                    {t.rowsPerPage}
                     <RowsPerPageSelect value={rowsPerPage} onChange={setRowsPerPage} />
                 </div>
-                <div className={styles.text}>{page} of {lastPage}</div>
+                <div className={styles.text}>{t.pageOf(page, lastPage)}</div>
                 <div className={styles.pageButtons}>
                     <div className={styles.icon} style={{ transform: 'rotate(-90deg)' }} onClick={() => page > 1 && setPage(page - 1)}>
                         <ChevronIcon />

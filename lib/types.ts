@@ -2,26 +2,16 @@ import type { components } from './schema';
 
 type Schemas = components['schemas'];
 
-export type ListStatus = Schemas['DomainListSingleResponse']['status'];
+export type Verdict = Schemas['DomainVerdictResponse']['verdict'];
 
-export type TldList = Schemas['KnownDomainDatabaseList'];
+export type DomainReport = Schemas['DomainReportResponse'];
 
-export type ReportPayload = Schemas['DomainReportsNewReportRequest'];
+export type TldList = {
+    tlds: { tld: string, registrar: string, last_update: string, count: number }[]
+    pagination: Schemas['Pagination']
+};
 
 export type ScamStatus = 'Safe' | 'Scam' | 'Unclassified';
-
-export type ScamCheckResult = {
-    domain: string
-    name: string
-    websiteText: string
-    lastUpdate: string | null
-    registrar: string
-    registrationDate: string
-    ownerName: string
-    ip: string
-    country: string
-    registrant: string
-};
 
 export type WhoisContact = {
     name: string | null
@@ -70,7 +60,7 @@ export type Article = {
 
 export type ToolStatus ={ hasResult: boolean, failed: boolean };
 
-export type ScrapingNode = Schemas['PublicNodes'];
+export type ScrapingNode = { name: string, node_id: string, last_seen: string, completed_jobs: number, failed_jobs: number };
 
 export type TakedownStatus = 'Reported' | 'Verified' | 'Abuse reports sent' | 'Taken down';
 
