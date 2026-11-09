@@ -80,6 +80,8 @@ export default function HomePage() {
                 <div className={styles.heroContent}>
                     <h1 className={styles.heroTitle}>
                         {t.heroTitle.before}<span className={styles.gradientText}>{t.heroTitle.highlight}</span>
+                        <br />
+                        {t.heroTitle.after}
                     </h1>
                     <SectionSubtitle>{t.heroSubtitle}</SectionSubtitle>
                     <SearchBar onSubmit={(value) => router.push(`/app/check#${value}`)} />
@@ -89,7 +91,7 @@ export default function HomePage() {
             <div className={styles.reportBanner}>
                 <div className={styles.reportBannerContent}>
                     <h2 className={styles.reportBannerText}>{t.reportBanner}</h2>
-                    <Button type="button" variant="white-outlined" className={styles.reportBannerButton} onClick={openReportModal}>{texts.nav.report}</Button>
+                    <Button type="button" variant="white-outlined" className={styles.reportBannerButton} onClick={openReportModal}>{t.reportBannerButton}</Button>
                 </div>
             </div>
 

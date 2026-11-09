@@ -77,7 +77,7 @@ const ScanRequest = ({ url }: { url: string }) => {
             <div className={styles.placeholder}>
                 <p className={styles.placeholderTitle}>{t.scrape.noData}</p>
                 <p>{t.scrape.text}</p>
-                <Button type="button" onClick={request} disabled={result === 'requested'}>{t.scrape.button}</Button>
+                <Button type="button" className={styles.scanButton} onClick={request} disabled={result === 'requested'}>{t.scrape.button}</Button>
                 <p className={styles.note}>{result ? t.scrape[result] : t.scrape.limit}</p>
             </div>
         </Card>
@@ -99,9 +99,43 @@ const ReportSummary = ({ report }: { report: DomainReport['report'] }) => (
     </div>
 );
 
+/** Easter egg for people who check scamscan.net itself. */
+const SelfCheck = () => {
+    const goToTool = useGoToTool();
+
+    return (
+        <div className={styles.self}>
+            <div className={styles.stage} aria-hidden>
+                <img src="/images/logo.png" alt="" width={72} height={48} className={styles.selfLogo} />
+                <svg className={styles.magnifier} width={72} height={72} viewBox="0 0 72 72" fill="none">
+                    <circle cx={28} cy={28} r={20} stroke="#6023FA" strokeWidth={4} fill="rgba(96, 35, 250, 0.06)" />
+                    <path d="M43 43l20 20" stroke="#6023FA" strokeWidth={6} strokeLinecap="round" />
+                </svg>
+            </div>
+            <SectionTitle as="h1" className={tools.title}>{t.self.title}</SectionTitle>
+            <SectionSubtitle className={styles.selfText}>{t.self.text}</SectionSubtitle>
+            <StatusChip status="Safe" />
+            <dl className={styles.facts}>
+                {t.self.facts.map(({ key, value }) => (
+                    <div className={styles.fact} key={key}>
+                        <dt>{key}</dt>
+                        <dd>{value}</dd>
+                    </div>
+                ))}
+            </dl>
+            <Button type="button" onClick={() => goToTool('/app/check', '')}>{t.self.button}</Button>
+        </div>
+    );
+};
+
 const WebsiteResult = ({ url }: { url: string }) => {
     const openReportModal = useOpenReportModal();
     const domain = toDomain(url);
+
+    if (domain === 'scamscan.net' || domain.endsWith('.scamscan.net')) {
+        return <SelfCheck />;
+    }
+
     const verdict = useLoad(url, () => getVerdict(url));
     const report = useLoad(domain, () => getReport(domain));
 
@@ -113,18 +147,24 @@ const WebsiteResult = ({ url }: { url: string }) => {
             </div>
 
             <div className={styles.cards}>
-                <Card title={t.verdict.title}>
-                    <h2 className={styles.subTitle}>{t.verdict.scamscan}</h2>
-                    <CardState state={verdict}>
-                        {(data) => (
-                            <>
-                                <StatusChip status={VERDICT_CHIP[data]} />
-                                <p className={styles.text}>{t.verdict[data]}</p>
-                            </>
-                        )}
-                    </CardState>
-                    <h2 className={styles.subTitle}>{t.verdict.external}</h2>
-                    <div className={styles.placeholder}>{t.verdict.externalText}</div>
+                <Card title={t.verdict.title} className={styles.verdictCard}>
+                    <div className={styles.verdicts}>
+                        <div className={styles.verdict}>
+                            <h2 className={styles.subTitle}>{t.verdict.scamscan}</h2>
+                            <CardState state={verdict}>
+                                {(data) => (
+                                    <>
+                                        <StatusChip status={VERDICT_CHIP[data]} />
+                                        <p className={styles.text}>{t.verdict[data]}</p>
+                                    </>
+                                )}
+                            </CardState>
+                        </div>
+                        <div className={styles.verdict}>
+                            <h2 className={styles.subTitle}>{t.verdict.external}</h2>
+                            <div className={styles.placeholder}>{t.verdict.externalText}</div>
+                        </div>
+                    </div>
                 </Card>
                 <Card title={t.reports.title}>
                     <CardState state={report}>

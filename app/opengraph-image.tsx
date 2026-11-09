@@ -11,7 +11,7 @@ export const contentType = 'image/png';
 export default async function OpengraphImage() {
     const font = await readFile(join(process.cwd(), 'app/fonts/THICCCBOI-Bold.ttf'));
     const logo = await readFile(join(process.cwd(), 'public/images/logo-footer.png'));
-    const { before, highlight } = texts.home.heroTitle;
+    const { before, highlight, after } = texts.home.heroTitle;
 
     return new ImageResponse(
         (
@@ -32,6 +32,7 @@ export default async function OpengraphImage() {
                     <span style={{ backgroundImage: 'linear-gradient(to left, #D939DE, #6023FA)', backgroundClip: 'text', color: 'transparent', marginLeft: 18 }}>
                         {highlight}
                     </span>
+                    <span style={{ width: '100%' }}>{after}</span>
                 </div>
             </div>
         ),

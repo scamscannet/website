@@ -121,6 +121,27 @@
     align-self: flex-start;
 }
 
+.verdictCard {
+    container-type: inline-size;
+}
+
+.verdicts {
+    display: grid;
+    gap: 24px;
+}
+
+.verdict {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+@container (min-width: 520px) {
+    .verdicts {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
 .subTitle {
     color: var(--text-black);
     font-family: var(--font-semibold);
@@ -152,9 +173,101 @@
     line-height: 28px;
 }
 
+.scanButton {
+    width: 100%;
+    height: 48px;
+}
+
 .note {
     font-size: 12px;
     line-height: 14px;
+}
+
+/* Easter egg: scamscan.net checking itself */
+
+@keyframes inspect {
+    0%, 100% { transform: translate(-70px, -20px) rotate(0deg); }
+    25% { transform: translate(10px, -30px) rotate(10deg); }
+    50% { transform: translate(30px, 10px) rotate(-6deg); }
+    60% { transform: translate(30px, 10px) rotate(-6deg) scale(1.15); }
+    75% { transform: translate(-40px, 20px) rotate(4deg); }
+}
+
+@keyframes nervous {
+    0%, 55%, 70%, 100% { transform: translateX(0); }
+    58%, 64% { transform: translateX(-3px); }
+    61%, 67% { transform: translateX(3px); }
+}
+
+.self {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 24px 0 48px;
+    text-align: center;
+}
+
+.stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 240px;
+    height: 160px;
+}
+
+.selfLogo {
+    animation: nervous 4s ease-in-out infinite;
+}
+
+.magnifier {
+    position: absolute;
+    top: 44px;
+    left: 84px;
+    animation: inspect 4s ease-in-out infinite;
+}
+
+.selfText {
+    color: var(--text-grey);
+}
+
+.facts {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #F5F5F5;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(101, 101, 101, 0.03);
+    text-align: left;
+}
+
+.fact {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    padding: 12px 24px;
+    border-bottom: 1px solid #F5F5F5;
+    font-family: var(--font-regular);
+    color: var(--text-grey);
+    font-size: 14px;
+    line-height: 17px;
+}
+.fact:last-child {
+    border-bottom: 0;
+}
+.fact dt {
+    font-family: var(--font-semibold);
+    font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .selfLogo,
+    .magnifier {
+        animation: none;
+    }
 }
 
 @media (max-width: 960px) {

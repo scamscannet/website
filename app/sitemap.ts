@@ -10,6 +10,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '/',
         '/about-us',
         '/blog',
+        '/privacy-policy',
+        '/terms-and-conditions',
         ...articles.map(({ id }) => `/blog/${id}`),
         '/app/check',
         '/app/takedown',

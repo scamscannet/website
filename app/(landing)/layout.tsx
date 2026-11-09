@@ -95,8 +95,8 @@ const Footer = () => (
                 </p>
             </li>
             <li className={styles.footerColumn}>
-                <a href="#" className="link">{footer.privacy}</a>
-                <a href="#" className="link">{footer.terms}</a>
+                <Link href="/privacy-policy" className="link">{footer.privacy}</Link>
+                <Link href="/terms-and-conditions" className="link">{footer.terms}</Link>
                 <div className={styles.socialLinks}>
                     <a href="https://www.linkedin.com/in/felixpf/" className="link"><LinkedInIcon /></a>
                     {/*

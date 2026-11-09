@@ -1,13 +1,19 @@
 // Every text shown on the website. Writing rules: see CLAUDE.md.
 
+const site = {
+    name: 'ScamScan',
+    description: 'Check if a website is a scam. ScamScan shows if a site is on a scam list, an AI risk score, a screenshot and whois data.',
+    operator: '[Operator: full name or company]',
+    email: 'email_example@gmail.com',
+    address: 'Im Staderfeld 63a, Neu Eliah, BW 96929',
+    hostingProvider: '[Hosting provider, country]',
+    copyright: (year: number) => `© ${year} ScamScan`,
+};
+
+const contact = `${site.operator}, ${site.address}. Email: ${site.email}`;
+
 export const texts = {
-    site: {
-        name: 'ScamScan',
-        description: 'Check if a website is a scam. ScamScan shows if a site is on a scam list, an AI risk score, a screenshot and whois data.',
-        email: 'email_example@gmail.com',
-        address: 'Im Staderfeld 63a, Neu Eliah, BW 96929',
-        copyright: (year: number) => `© ${year} ScamScan`,
-    },
+    site,
 
     meta: {
         home: { title: 'ScamScan: check if a website is a scam', description: 'Enter a URL to see if a website is on a scam list, its AI risk score, a screenshot and its whois data. No account needed.' },
@@ -22,6 +28,8 @@ export const texts = {
         login: { title: 'Log in', description: 'Log in to ScamScan.' },
         admin: { title: 'Admin', description: 'ScamScan admin.' },
         notFound: { title: 'Page not found', description: 'This page does not exist.' },
+        privacy: { title: 'Privacy policy', description: 'Which personal data ScamScan processes, why, for how long, and your rights.' },
+        terms: { title: 'Terms and conditions', description: 'The rules for using ScamScan, its website checks, reports and tools.' },
     },
 
     nav: {
@@ -43,9 +51,10 @@ export const texts = {
     },
 
     home: {
-        heroTitle: { before: 'Check if a website is a ', highlight: 'scam' },
-        heroSubtitle: 'Paste a domain or URL. You get its status on known scam lists, an AI risk score, a screenshot and its whois data.',
-        reportBanner: 'Found a scam website? Report it so we can work on taking it down.',
+        heroTitle: { before: 'Taking down ', highlight: 'scams.', after: 'One website at a time.' },
+        heroSubtitle: 'Paste a domain or URL and find out if you can trust it.',
+        reportBanner: 'Found a scam website? We will take it down.',
+        reportBannerButton: 'Start takedown',
         impactTitle: 'Our numbers',
         impactSubtitle: 'What ScamScan has done so far.',
         metrics: [
@@ -171,6 +180,17 @@ export const texts = {
             none: 'Nobody has reported this website yet.',
             count: (count: number) => count === 1 ? '1 report' : `${count} reports`,
             since: (date: string) => `First reported on ${date}`,
+        },
+        self: {
+            title: 'Wait, you\'re checking us?',
+            text: 'Fair enough. Trust no one. So we ran the scan on ourselves, very thoroughly, with a magnifying glass.',
+            facts: [
+                { key: 'Verdict', value: 'Safe. We would say that, of course.' },
+                { key: 'Scam score', value: '0%. We graded our own homework.' },
+                { key: 'Reports', value: 'None. We checked twice, then once more.' },
+                { key: 'Takedown', value: 'Not planned. We asked ourselves nicely.' },
+            ],
+            button: 'Check a website that isn\'t us',
         },
         takedown: { title: 'Takedown', text: 'If we are working to take this website down, the progress will show here.' },
         scrape: {
@@ -321,6 +341,135 @@ export const texts = {
         contactAllowed: 'You may contact me if you have questions about my report.',
         submit: 'Send report',
         close: 'Close',
+    },
+
+    legal: {
+        lastUpdated: 'Last updated: 9 November 2026',
+        privacy: {
+            title: 'Privacy policy',
+            intro: 'This policy explains which personal data we process when you use ScamScan, why we do it, how long we keep it and what rights you have. We follow the EU General Data Protection Regulation (GDPR).',
+            sections: [
+                {
+                    title: 'Who is responsible',
+                    paragraphs: [
+                        `The controller for this website is ${contact}`,
+                        'For any question about your data or to use your rights, write to us at the email address above.',
+                    ],
+                },
+                {
+                    title: 'Visiting the website',
+                    paragraphs: [
+                        `When you open a page, our servers log your IP address, the date and time, the page requested, your browser and operating system, and the page you came from. We need this to deliver the website and to protect it against attacks (Art. 6(1)(f) GDPR). The website is hosted by ${site.hostingProvider}. Logs are deleted after [14] days unless we need them to investigate an attack.`,
+                    ],
+                },
+                {
+                    title: 'Website checks',
+                    paragraphs: [
+                        'When you check a website, the address you enter is sent to our API to look up our verdict and any reports. We store the checked addresses, but not together with your identity. We use them to run the service and to improve our scam detection (Art. 6(1)(f) GDPR).',
+                        'When you request a scan, our servers visit the website and store a screenshot, its text and its server details. To enforce the limit of 3 scans a day, we keep your IP address together with the time of the request for [24 hours].',
+                    ],
+                },
+                {
+                    title: 'Reporting a scam',
+                    paragraphs: [
+                        'When you report a website, we store the website address and, if you give it, your description of what happened. We use this to review the website and to request a takedown (Art. 6(1)(f) GDPR).',
+                        'Giving your email address is optional. If you do, we use it only to send you updates about your report and, if you agreed, to ask you questions about it (Art. 6(1)(a) GDPR). You can withdraw your consent at any time by writing to us. We don\'t pass your name or email address to registrars or hosting providers.',
+                    ],
+                },
+                {
+                    title: 'Whois lookups and the map',
+                    paragraphs: [
+                        'For a whois lookup, the domain or IP address you enter is sent to our whois service, which queries the public registration databases (registries and registrars).',
+                        'The map in the IP lookup loads its images from OpenStreetMap (OpenStreetMap Foundation, United Kingdom). Your browser sends your IP address to their servers to do this. The UK has an adequacy decision from the EU Commission. See the OpenStreetMap Foundation\'s privacy policy for details.',
+                    ],
+                },
+                {
+                    title: 'Cookies',
+                    paragraphs: [
+                        'We don\'t use tracking, analytics or advertising cookies. Only team members who log in get a session cookie, which is needed to keep them logged in (§ 25(2) TDDDG).',
+                    ],
+                },
+                {
+                    title: 'Data about websites and their operators',
+                    paragraphs: [
+                        'To find and take down scam websites, we process public data about websites: their content, screenshots, server details and whois registration data. This can include names or contact details of the people who run them. We do this to protect the public from fraud (Art. 6(1)(f) GDPR). We share it with registrars, hosting providers, payment providers and authorities when we request a takedown. If you think we list your website by mistake, contact us and we will review it.',
+                    ],
+                },
+                {
+                    title: 'How long we keep data',
+                    paragraphs: [
+                        'We keep data only as long as we need it for the purposes above. Reports and takedown cases are kept for [3 years] after they are closed, so we can recognize scams that return. Your email address is deleted when your report is closed or when you withdraw your consent.',
+                    ],
+                },
+                {
+                    title: 'Your rights',
+                    paragraphs: [
+                        'You have the right to access your data, to have it corrected or deleted, to restrict its processing, to receive it in a portable format and to object to processing based on legitimate interest (Art. 15 to 21 GDPR). If you gave consent, you can withdraw it at any time, which doesn\'t affect processing before that.',
+                        'You can also complain to a data protection authority, for example the one in the country where you live or the one responsible for us.',
+                    ],
+                },
+                {
+                    title: 'Changes',
+                    paragraphs: ['We update this policy when our service changes. The date at the top shows the latest version.'],
+                },
+            ],
+        },
+        terms: {
+            title: 'Terms and conditions',
+            intro: `These terms apply to your use of ScamScan, run by ${site.operator}. By using the website you accept them.`,
+            sections: [
+                {
+                    title: 'What ScamScan offers',
+                    paragraphs: [
+                        'ScamScan lets you check websites for signs of fraud, report scam websites, follow our takedown cases and use tools such as whois lookups and domain zone downloads. The service is free. We can change, limit or stop features at any time.',
+                    ],
+                },
+                {
+                    title: 'Our verdicts are not a guarantee',
+                    paragraphs: [
+                        'Our verdicts come from our own checks, user reports, automated analysis and external lists. They can be wrong or out of date. A website marked as safe or unclassified can still be a scam, and a website marked as a scam may be legitimate. Use ScamScan as one source of information and make your own decision before you pay or enter personal data.',
+                    ],
+                },
+                {
+                    title: 'How you may use ScamScan',
+                    paragraphs: [
+                        'Don\'t misuse the service. In particular, don\'t query it automatically or in bulk without our written permission, don\'t get around limits such as the 3 scans a day, don\'t submit reports you know are false, and don\'t attack or overload our systems. We can block access if you break these rules.',
+                    ],
+                },
+                {
+                    title: 'Reports and takedowns',
+                    paragraphs: [
+                        'Only report websites that you honestly believe are fraudulent, and describe what happened truthfully. You allow us to use the content of your report to review the website, to request takedowns and to warn others, without naming you.',
+                        'We decide for ourselves whether and how to act on a report. We can\'t promise that a website will be taken down, because that decision is made by registrars, hosting providers and authorities.',
+                    ],
+                },
+                {
+                    title: 'If you run a listed website',
+                    paragraphs: [
+                        `If you think we list your website by mistake, write to ${site.email} with the domain and your reasons. We will review it and correct the listing if we were wrong.`,
+                    ],
+                },
+                {
+                    title: 'Content and data',
+                    paragraphs: [
+                        'The design, texts and code of ScamScan belong to us. You may share links to our pages and quote individual results with a source. Screenshots and content of third-party websites belong to their owners and are shown only as evidence.',
+                    ],
+                },
+                {
+                    title: 'Liability',
+                    paragraphs: [
+                        'We are fully liable for intent and gross negligence, for injury to life, body or health, and under the German Product Liability Act. For slight negligence we are liable only if we breach an essential obligation, and then only for typical, foreseeable damage. Otherwise our liability is excluded. This also applies to our staff and agents.',
+                    ],
+                },
+                {
+                    title: 'Final provisions',
+                    paragraphs: [
+                        'German law applies. If you are a consumer, this doesn\'t take away the protection of the mandatory laws of the country where you live. If a provision of these terms is invalid, the rest remains valid. We can update these terms; the date at the top shows the latest version.',
+                        `Contact: ${contact}`,
+                    ],
+                },
+            ],
+        },
     },
 
     login: {
