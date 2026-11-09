@@ -4,7 +4,8 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { Button, SectionSubtitle, SectionTitle } from '@/components/ui';
 import { SearchBar } from '@/components/SearchBar';
 import { StatusChip } from '@/components/ScamCheckWidgets';
-import { getReport, getVerdict } from '@/lib/api';
+import { TakedownIcon } from '@/components/icons';
+import { getReport, getVerdict, requestScan } from '@/lib/api';
 import { useGoToTool, useHash, useOpenReportModal, useReportToolStatus } from '@/lib/hooks';
 import { texts } from '@/lib/texts';
 import type { DomainReport, ScamStatus, Verdict } from '@/lib/types';
@@ -64,15 +65,38 @@ const Placeholder = ({ title, text }: { title: string, text: string }) => (
     </Card>
 );
 
-const ReportRows = ({ report }: { report: NonNullable<DomainReport['report']> }) => (
-    <dl className={styles.rows}>
-        <dt>{t.reports.status}</dt>
-        <dd>{report.status}</dd>
-        <dt>{t.reports.reported}</dt>
-        <dd>{new Date(report.timestamp).toLocaleDateString()}</dd>
-        <dt>{t.reports.count}</dt>
-        <dd>{report.report_count}</dd>
-    </dl>
+const ScanRequest = ({ url }: { url: string }) => {
+    const [result, setResult] = useState<'requested' | 'failed'>();
+
+    useEffect(() => setResult(undefined), [url]);
+
+    const request = () => requestScan(url).then(() => setResult('requested')).catch(() => setResult('failed'));
+
+    return (
+        <Card title={t.scrape.title}>
+            <div className={styles.placeholder}>
+                <p className={styles.placeholderTitle}>{t.scrape.noData}</p>
+                <p>{t.scrape.text}</p>
+                <Button type="button" onClick={request} disabled={result === 'requested'}>{t.scrape.button}</Button>
+                <p className={styles.note}>{result ? t.scrape[result] : t.scrape.limit}</p>
+            </div>
+        </Card>
+    );
+};
+
+const ReportSummary = ({ report }: { report: DomainReport['report'] }) => (
+    <div className={styles.summary}>
+        <div className={`${styles.iconBox} ${report ? styles.iconBoxWarning : ''}`}>
+            <TakedownIcon />
+        </div>
+        <div className={styles.summaryText}>
+            <p className={styles.summaryTitle}>{report ? t.reports.count(Math.max(report.report_count, 1)) : t.reports.noneTitle}</p>
+            <p className={styles.text}>
+                {report ? t.reports.since(new Date(report.timestamp).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })) : t.reports.none}
+            </p>
+        </div>
+        {report && <span className={styles.reportStatus}>{report.status}</span>}
+    </div>
 );
 
 const WebsiteResult = ({ url }: { url: string }) => {
@@ -90,6 +114,7 @@ const WebsiteResult = ({ url }: { url: string }) => {
 
             <div className={styles.cards}>
                 <Card title={t.verdict.title}>
+                    <h2 className={styles.subTitle}>{t.verdict.scamscan}</h2>
                     <CardState state={verdict}>
                         {(data) => (
                             <>
@@ -98,17 +123,19 @@ const WebsiteResult = ({ url }: { url: string }) => {
                             </>
                         )}
                     </CardState>
+                    <h2 className={styles.subTitle}>{t.verdict.external}</h2>
+                    <div className={styles.placeholder}>{t.verdict.externalText}</div>
                 </Card>
                 <Card title={t.reports.title}>
                     <CardState state={report}>
-                        {(data) => data.report ? <ReportRows report={data.report} /> : <p className={styles.text}>{t.reports.none}</p>}
+                        {(data) => <ReportSummary report={data.report} />}
                     </CardState>
                     <Button type="button" variant="outlined" className={styles.reportButton} onClick={openReportModal}>{t.report.button}</Button>
                 </Card>
             </div>
 
             <Placeholder {...t.takedown} />
-            <Placeholder {...t.scrape} />
+            <ScanRequest url={url} />
             <Placeholder {...t.geolocation} />
         </div>
     );

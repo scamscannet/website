@@ -64,18 +64,56 @@
     line-height: 17px;
 }
 
-.rows {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 12px 24px;
-    font-family: var(--font-regular);
-    color: var(--text-grey);
-    font-size: 14px;
-    line-height: 17px;
+.summary {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
-.rows dt {
+
+.iconBox {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    background: #F5F5F5;
+    color: #344054;
+}
+.iconBoxWarning {
+    background: #FFFBF1;
+    color: #DF9300;
+}
+.iconBox svg [stroke] {
+    stroke: currentColor;
+}
+
+.summaryText {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.summaryTitle {
+    color: var(--text-black);
+    font-family: var(--font-bold);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 28px;
+}
+
+.reportStatus {
+    padding: 4px 12px;
+    border-radius: 4px;
+    background: #FFFBF1;
+    color: #DF9300;
     font-family: var(--font-semibold);
+    font-size: 14px;
     font-weight: 600;
+    line-height: 17px;
+    text-transform: capitalize;
 }
 
 .reportButton {
@@ -83,7 +121,19 @@
     align-self: flex-start;
 }
 
+.subTitle {
+    color: var(--text-black);
+    font-family: var(--font-semibold);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 17px;
+}
+
 .placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
     padding: 32px 24px;
     border: 1px dashed var(--grey-light);
     border-radius: 4px;
@@ -92,6 +142,19 @@
     font-family: var(--font-regular);
     font-size: 14px;
     line-height: 17px;
+}
+
+.placeholderTitle {
+    color: var(--text-black);
+    font-family: var(--font-bold);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 28px;
+}
+
+.note {
+    font-size: 12px;
+    line-height: 14px;
 }
 
 @media (max-width: 960px) {

@@ -36,6 +36,8 @@ export const getReport = (domain: string) => call(client.GET('/report/{url}', { 
 
 export const sendReport = (domain: string) => call(client.POST('/report', { body: { domain } }));
 
+export const requestScan = (url: string) => call(client.POST('/snapshots/scrape/job', { body: { url, domain: null, requested_scrapes: 1 } }));
+
 export const getWhoisDomain = (domain: string): Promise<DomainWhois> => request(`${WHOIS_URL}/v1/whois/${domain}`).then((response) => response.json());
 
 /** The original upstream payload: RDAP JSON (pretty-printed) or plain WHOIS text. */
